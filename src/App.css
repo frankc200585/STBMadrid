@@ -1,0 +1,158 @@
+.camera-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #e8c840;
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  background: #1c1c1c;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+fieldset {
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 0.6rem 1rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+legend {
+  padding: 0 0.4rem;
+  color: #aaa;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.quality-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 180px;
+}
+
+.quality-section label {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+input[type="range"] {
+  accent-color: #e8c840;
+  width: 100%;
+}
+
+/* Preview */
+.preview-wrapper {
+  position: relative;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.resolution-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  color: #e8c840;
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.status-msg { color: #aaa; font-size: 0.9rem; }
+.error-msg  { color: #f87171; font-size: 0.9rem; }
+
+/* Buttons */
+.btn-capture, .btn-download {
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-capture {
+  background: #e8c840;
+  color: #000;
+  align-self: flex-start;
+}
+
+.btn-capture:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-capture:not(:disabled):hover { opacity: 0.85; }
+
+.btn-download {
+  background: #2563eb;
+  color: #fff;
+  margin-top: 0.5rem;
+}
+
+.btn-download:hover { opacity: 0.85; }
+
+/* Result */
+.result {
+  background: #1c1c1c;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.result h2 {
+  font-size: 1.1rem;
+  color: #aaa;
+}
+
+.captured-img {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: contain;
+  max-height: 400px;
+}
+
+.meta {
+  font-size: 0.8rem;
+  color: #888;
+}
