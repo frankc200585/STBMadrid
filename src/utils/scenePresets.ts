@@ -1,5 +1,14 @@
 import type { ColorGrade } from './postProcess'
 
+/** Maps a ColorGrade to a CSS filter string for live video preview (GPU-accelerated). */
+export function gradeToFilterStyle(g: ColorGrade): string {
+  const br = (1 + g.brightness / 100).toFixed(2)
+  const co = (1 + g.contrast / 100).toFixed(2)
+  const sa = Math.max(0, 1 + g.saturation / 100).toFixed(2)
+  const hue = (-(g.warmth * 0.12)).toFixed(1)
+  return `brightness(${br}) contrast(${co}) saturate(${sa}) hue-rotate(${hue}deg)`
+}
+
 export interface ScenePreset {
   id: string
   label: string

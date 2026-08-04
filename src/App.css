@@ -281,3 +281,204 @@ input[type="range"] {
   transition: opacity 0.15s;
 }
 .btn-download:hover { opacity: 0.88; }
+
+/* ── Grid overlay ────────────────────────────────────────────────────────── */
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+.grid-line  { stroke: rgba(255,255,255,0.35); stroke-width: 0.015; }
+.grid-point { fill: rgba(255,255,255,0.6); }
+
+/* ── Zoom bar ────────────────────────────────────────────────────────────── */
+.zoom-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 1.2rem;
+  background: #0a0a0a;
+}
+.zoom-ico { font-size: 1rem; }
+.zoom-val { font-size: 0.78rem; color: #f5c842; min-width: 2.2rem; text-align: right;
+            font-variant-numeric: tabular-nums; }
+
+/* ── Gallery strip ───────────────────────────────────────────────────────── */
+.gallery-strip {
+  padding: 0.75rem 1rem;
+  background: #0d0d0d;
+  border-top: 1px solid #1a1a1a;
+}
+.gallery-label {
+  font-size: 0.7rem;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+.gallery-row {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.gallery-row::-webkit-scrollbar { display: none; }
+
+.gallery-thumb {
+  flex-shrink: 0;
+  width: 72px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: #1a1a1a;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.15s;
+}
+.gallery-thumb img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+.gallery-thumb.selected { border-color: #f5c842; }
+.thumb-meta {
+  display: block;
+  font-size: 0.6rem;
+  color: #888;
+  padding: 2px 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.thumb-size {
+  display: block;
+  font-size: 0.58rem;
+  color: #555;
+  padding: 0 4px 3px;
+}
+
+/* ── Photo viewer (fullscreen modal) ─────────────────────────────────────── */
+.viewer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.viewer-content {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 95dvh;
+  overflow-y: auto;
+}
+.viewer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.viewer-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.viewer-scene { font-size: 0.85rem; color: #f5c842; font-weight: 700; }
+.viewer-dim, .viewer-size { font-size: 0.78rem; color: #666; }
+.viewer-close {
+  background: #222;
+  border: none;
+  color: #aaa;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Before / After slider ───────────────────────────────────────────────── */
+.ba-wrap {
+  position: relative;
+  user-select: none;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: #000;
+}
+.ba-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.ba-before {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 50% 0 0);
+  pointer-events: none;
+}
+.ba-before img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.ba-range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+  z-index: 10;
+  margin: 0;
+}
+.ba-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #f5c842;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ba-handle span {
+  background: #f5c842;
+  color: #000;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+.ba-label {
+  position: absolute;
+  bottom: 8px;
+  background: rgba(0,0,0,0.6);
+  color: #ccc;
+  font-size: 0.68rem;
+  padding: 2px 7px;
+  border-radius: 5px;
+  pointer-events: none;
+  z-index: 6;
+}
+.ba-label-l { left: 8px; }
+.ba-label-r { right: 8px; }
+
+.viewer-dl { margin-top: 0.25rem; }

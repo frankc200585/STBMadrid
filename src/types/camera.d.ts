@@ -12,6 +12,7 @@ interface ExtendedTrackConstraints extends MediaTrackConstraintSet {
   saturation?: ConstrainDouble
   sharpness?: ConstrainDouble
   torch?: boolean
+  zoom?: ConstrainDouble
 }
 
 interface ExtendedMediaTrackCapabilities extends MediaTrackCapabilities {
@@ -27,6 +28,7 @@ interface ExtendedMediaTrackCapabilities extends MediaTrackCapabilities {
   saturation?: { min: number; max: number; step: number }
   sharpness?: { min: number; max: number; step: number }
   torch?: boolean
+  zoom?: { min: number; max: number; step: number }
 }
 
 interface ExtendedMediaTrackSettings extends MediaTrackSettings {
