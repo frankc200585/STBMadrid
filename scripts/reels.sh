@@ -121,6 +121,72 @@ comprimidos() {
   echo "✅ Revisión terminada."
 }
 
+# ---------------------------------------------------------------- marca de agua
+
+# Posicion por defecto: arriba a la derecha, fuera de la zona que tapa
+# la interfaz de Instagram (15% superior / 20% inferior).
+MARGEN=45
+ANCHO_LOGO=190   # px sobre un video de 1080 de ancho
+
+marca() {
+  local f="${1:?falta video}" logo="${2:?falta logo.png}" salida="${3:-${1%.*}_marca.mp4}"
+  comprobar ffmpeg
+  [[ -f "$logo" ]] || die "No encuentro el logo: $logo"
+  ffmpeg -hide_banner -loglevel error -i "$f" -i "$logo" -filter_complex \
+"[1:v]scale=${ANCHO_LOGO}:-1,format=rgba,colorchannelmixer=aa=0.75[wm];\
+[0:v][wm]overlay=W-w-${MARGEN}:${MARGEN},format=yuv420p" \
+    -c:v libx264 -crf 20 -preset "$PRESET" \
+    -c:a copy -movflags +faststart "$salida"
+  echo "✅ $salida"
+}
+
+marca_lote() {
+  local carpeta="${1:?falta carpeta}" logo="${2:?falta logo.png}"
+  local destino="${carpeta%/}_CON_MARCA"
+  mkdir -p "$destino"
+  find "$carpeta" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) -print0 |
+  while IFS= read -r -d '' f; do
+    echo "🏷  $(basename "$f")"
+    marca "$f" "$logo" "$destino/$(basename "${f%.*}").mp4"
+  done
+  echo "✅ Todo en $destino"
+}
+
+# Cadena completa: normaliza + recorta a 9:16 + marca de agua, en una pasada.
+# Es el comando que usaras el 90% de las veces.
+reel() {
+  local f="${1:?falta video}" logo="${2:?falta logo.png}" salida="${3:-${1%.*}_reel.mp4}"
+  comprobar ffmpeg; comprobar ffprobe
+  [[ -f "$logo" ]] || die "No encuentro el logo: $logo"
+
+  local pre_hdr=""
+  if es_hdr "$f"; then
+    echo "🎨 Origen HDR — se convierte a SDR"
+    pre_hdr="zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,\
+tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,"
+  fi
+
+  ffmpeg -hide_banner -loglevel error -i "$f" -i "$logo" -filter_complex \
+"[0:v]${pre_hdr}scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920[v];\
+[1:v]scale=${ANCHO_LOGO}:-1,format=rgba,colorchannelmixer=aa=0.75[wm];\
+[v][wm]overlay=W-w-${MARGEN}:${MARGEN},format=yuv420p" \
+    -c:v libx264 -crf 20 -preset "$PRESET" -r 30 -fps_mode cfr \
+    -c:a aac -b:a 192k -movflags +faststart "$salida"
+  echo "✅ $salida  (1080x1920, listo para subir)"
+}
+
+reel_lote() {
+  local carpeta="${1:?falta carpeta}" logo="${2:?falta logo.png}"
+  local destino="${carpeta%/}_REELS"
+  mkdir -p "$destino"
+  find "$carpeta" -maxdepth 1 -type f \( -iname '*.mp4' -o -iname '*.mov' \) -print0 |
+  while IFS= read -r -d '' f; do
+    echo "🎬 $(basename "$f")"
+    reel "$f" "$logo" "$destino/$(basename "${f%.*}")_reel.mp4"
+  done
+  echo "✅ Todo en $destino — listos para CapCut o para subir directamente"
+}
+
 case "${1:-}" in
   normalizar)   shift; normalizar "$@" ;;
   vertical)     shift; vertical "$@" ;;
@@ -128,5 +194,9 @@ case "${1:-}" in
   lento)        shift; lento "$@" ;;
   tiempos)      shift; tiempos "$@" ;;
   comprimidos)  shift; comprimidos "$@" ;;
-  *) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//' ;;
+  marca)        shift; marca "$@" ;;
+  marca-lote)   shift; marca_lote "$@" ;;
+  reel)         shift; reel "$@" ;;
+  reel-lote)    shift; reel_lote "$@" ;;
+  *) sed -n '2,24p' "$0" | sed 's/^# \{0,1\}//' ;;
 esac
