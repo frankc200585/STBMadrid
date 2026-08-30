@@ -5,7 +5,9 @@
 #   1. Sube "index.html" (de esta carpeta) al raiz de la web como
 #      "maintenance.html".
 #   2. Copia este bloque AL PRINCIPIO del .htaccess del raiz.
-#   3. Sustituye 0.0.0.0 por tu IP publica para poder seguir viendo la web.
+#   3. OPCIONAL: sustituye 0.0.0.0 por tu IP publica para poder seguir
+#      viendo la web tu mismo. Si no lo tocas, se bloquea a TODO el mundo,
+#      que es justo lo que hace falta para un cierre inmediato.
 #
 # PARA QUITAR EL BLOQUEO: borra este bloque del .htaccess.
 # ============================================================
@@ -16,9 +18,9 @@
   # Tu IP: sustituye por la real (mira cual es en https://ifconfig.me)
   RewriteCond %{REMOTE_ADDR} !^0\.0\.0\.0$
 
-  # No bloquear la propia pagina de mantenimiento ni sus recursos
+  # No bloquear la propia pagina de mantenimiento
+  # (no hace falta excluir css/js: maintenance.html lleva los estilos dentro)
   RewriteCond %{REQUEST_URI} !^/maintenance\.html$
-  RewriteCond %{REQUEST_URI} !\.(css|js|png|jpe?g|gif|svg|webp|ico|woff2?)$
 
   # Devolver 503 (correcto para SEO: es temporal, no borra el posicionamiento)
   RewriteRule ^ /maintenance.html [R=503,L]
