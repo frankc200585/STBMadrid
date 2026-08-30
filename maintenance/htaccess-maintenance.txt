@@ -1,0 +1,33 @@
+# ============================================================
+# STB Madrid — Modo mantenimiento (Apache / Hostinger / cPanel)
+#
+# USO:
+#   1. Sube "index.html" (de esta carpeta) al raiz de la web como
+#      "maintenance.html".
+#   2. Copia este bloque AL PRINCIPIO del .htaccess del raiz.
+#   3. Sustituye 0.0.0.0 por tu IP publica para poder seguir viendo la web.
+#
+# PARA QUITAR EL BLOQUEO: borra este bloque del .htaccess.
+# ============================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Tu IP: sustituye por la real (mira cual es en https://ifconfig.me)
+  RewriteCond %{REMOTE_ADDR} !^0\.0\.0\.0$
+
+  # No bloquear la propia pagina de mantenimiento ni sus recursos
+  RewriteCond %{REQUEST_URI} !^/maintenance\.html$
+  RewriteCond %{REQUEST_URI} !\.(css|js|png|jpe?g|gif|svg|webp|ico|woff2?)$
+
+  # Devolver 503 (correcto para SEO: es temporal, no borra el posicionamiento)
+  RewriteRule ^ /maintenance.html [R=503,L]
+</IfModule>
+
+ErrorDocument 503 /maintenance.html
+
+<IfModule mod_headers.c>
+  # Pide a buscadores y navegadores que reintenten en 1 hora
+  Header always set Retry-After "3600"
+  Header always set Cache-Control "no-store, no-cache, must-revalidate"
+</IfModule>
