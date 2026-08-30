@@ -1,54 +1,56 @@
 # Modo mantenimiento — STBMadrid.com
 
-Kit para dejar la web fuera del acceso publico de forma **temporal y reversible**.
+Cierre **temporal** de la web al publico, con **reapertura automatica**.
 
-Contenido:
+- Cierre: en cuanto lo instales.
+- Reapertura: **miercoles 2 de septiembre de 2026, 08:00** (configurable).
+- No hay que volver a entrar a quitar nada.
 
 | Archivo | Para que sirve |
 |---|---|
-| `index.html` | Pagina de aviso ("Volvemos enseguida"). Subela como `maintenance.html`. |
-| `htaccess-maintenance.txt` | Bloque para el `.htaccess` (Apache, Hostinger, cPanel, WordPress). |
-| `nginx-maintenance.conf` | Bloque equivalente para Nginx / VPS. |
+| `index.html` | Pagina de aviso. Subela al raiz como `maintenance.html`. |
+| `htaccess-maintenance.txt` | Bloque para el `.htaccess`, con fecha de fin automatica. |
+| `nginx-maintenance.conf` | Equivalente para Nginx / VPS. |
 
-## Recomendacion importante: usar 503, no 403 ni borrar la web
+## Instalacion (Hostinger / cPanel / WordPress / cualquier Apache)
 
-El bloqueo devuelve **HTTP 503 + Retry-After**. Es la respuesta correcta para una
-parada temporal: Google entiende que es pasajero y **no pierdes posicionamiento**.
-Si en cambio se apaga el dominio, se devuelve 404 o se despublica, el buscador
-puede empezar a desindexar paginas en pocos dias.
+1. Administrador de archivos → carpeta `public_html/`.
+2. Sube `index.html` y renombralo a **`maintenance.html`**.
+3. Abre `public_html/.htaccess` (creale si no existe) y pega el contenido de
+   `htaccess-maintenance.txt` **al principio del archivo**. Guarda.
+4. Hecho. La web queda cerrada y se reabre sola el miercoles.
 
-## Segun donde este alojada la web
+**Cambiar la fecha de vuelta:** edita el numero de la linea
+`RewriteCond %{TIME} <20260902080000` (formato `AAAAMMDDHHMMSS`).
+**Reabrir antes de tiempo:** borra ese bloque del `.htaccess`.
+**Seguir viendo la web tu:** sustituye `0.0.0.0` por tu IP (https://ifconfig.me).
 
-### Hostinger / cPanel / cualquier Apache
-1. Sube `index.html` al raiz del dominio (`public_html/`) con el nombre `maintenance.html`.
-2. Edita `public_html/.htaccess` y pega arriba del todo el contenido de `htaccess-maintenance.txt`.
-3. Cambia `0.0.0.0` por tu IP publica (la ves en https://ifconfig.me) para poder seguir entrando tu.
-4. Para reactivar la web: borra ese bloque del `.htaccess`.
+### Sobre la hora
+`%{TIME}` usa la hora del **servidor**, que en muchos hostings va en UTC
+(2 h menos que Madrid en verano). En el peor caso la web reabre un par de
+horas mas tarde. Si necesitas precision, mira la hora del servidor en el panel
+del hosting y ajusta el numero.
 
-### WordPress
-Igual que arriba. Alternativa sin tocar ficheros: cualquier plugin de tipo
-"Maintenance Mode" / "Coming Soon", activando la opcion de responder 503.
+## VPS con Nginx
+Ver las instrucciones dentro de `nginx-maintenance.conf`. Funciona con un
+fichero interruptor y un `at` programado para el miercoles.
 
-### VPS con Nginx
-1. Deja `maintenance.html` en la raiz del sitio.
-2. Pega `nginx-maintenance.conf` dentro del bloque `server { ... }`.
-3. `sudo nginx -t && sudo systemctl reload nginx`.
-4. Para reactivar: comenta o borra el bloque y recarga de nuevo.
+## Cloudflare (si el dominio pasa por Cloudflare)
+La via mas rapida y sin tocar el hosting:
+- **Security → WAF → Custom rules**: regla `Block` para todo el trafico salvo tu IP.
+- O **Rules → Response Rules** devolviendo la pagina de aviso.
+- Ojo: Cloudflare **no** tiene caducidad automatica en el plan gratuito;
+  tendrias que desactivar la regla a mano el miercoles.
 
-### Cloudflare (si el dominio pasa por Cloudflare)
-Lo mas rapido, sin tocar el hosting:
-- **Rules → Redirect/Response Rules**: regla que a todo `hostname = stbmadrid.com`
-  responda con la pagina de mantenimiento.
-- O bien **Security → WAF**: regla `Block` para todo el trafico salvo tu IP.
-- Se desactiva con un clic desde el panel.
+## Por que 503 y no apagar la web
 
-### Netlify / Vercel / hosting estatico
-- Netlify: `Site settings → General → Danger zone → Stop builds`, o publicar una
-  rama que solo contenga `maintenance.html` como `index.html`.
-- Vercel: `Settings → Deployment Protection` (protege el sitio con contrasena),
-  o promocionar un deployment que solo sirva la pagina de aviso.
+El bloqueo responde **HTTP 503 + Retry-After**, que es lo correcto para una
+parada temporal: Google lo lee como "vuelve pronto" y **mantiene el
+posicionamiento**. Un cierre de 2-3 dias con 503 no tiene impacto en SEO
+(a partir de una semana larga si conviene revisarlo).
 
 ## Lo que NO conviene hacer
-- Borrar los DNS o suspender el dominio: corta tambien el correo del dominio y
-  tarda horas en propagarse al volver.
-- Poner `Disallow: /` en robots.txt: no bloquea a los visitantes y si perjudica al SEO.
+- **Borrar los DNS o suspender el dominio**: tumba tambien el correo del dominio
+  y tarda horas en propagarse al volver.
+- **Devolver 404 o 403**: Google puede empezar a desindexar paginas.
+- **`Disallow: /` en robots.txt**: no bloquea a los visitantes y si perjudica al SEO.

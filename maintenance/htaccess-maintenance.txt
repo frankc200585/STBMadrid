@@ -1,35 +1,56 @@
 # ============================================================
-# STB Madrid — Modo mantenimiento (Apache / Hostinger / cPanel)
+# STB Madrid — Modo mantenimiento CON FECHA DE FIN AUTOMATICA
+# (Apache / Hostinger / cPanel / WordPress)
+#
+# Cierra la web al publico AHORA y la reabre sola el
+# MIERCOLES 2 DE SEPTIEMBRE DE 2026 a las 08:00.
+# No hay que volver a entrar a quitar nada.
 #
 # USO:
-#   1. Sube "index.html" (de esta carpeta) al raiz de la web como
-#      "maintenance.html".
-#   2. Copia este bloque AL PRINCIPIO del .htaccess del raiz.
-#   3. OPCIONAL: sustituye 0.0.0.0 por tu IP publica para poder seguir
-#      viendo la web tu mismo. Si no lo tocas, se bloquea a TODO el mundo,
-#      que es justo lo que hace falta para un cierre inmediato.
+#   1. Sube "index.html" al raiz de la web (public_html) con el
+#      nombre "maintenance.html".
+#   2. Pega este bloque AL PRINCIPIO del .htaccess del raiz. Guarda.
 #
-# PARA QUITAR EL BLOQUEO: borra este bloque del .htaccess.
+# CAMBIAR LA FECHA DE REAPERTURA:
+#   Edita el numero de la linea "RewriteCond %{TIME} <..."
+#   Formato: AAAAMMDDHHMMSS  ->  20260902080000 = 02/09/2026 a las 08:00
+#
+# REABRIR ANTES DE TIEMPO: borra este bloque del .htaccess.
 # ============================================================
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Tu IP: sustituye por la real (mira cual es en https://ifconfig.me)
+  # (1) Solo bloquea MIENTRAS no se haya llegado a esta fecha/hora.
+  #     Pasado ese momento la regla deja de aplicarse y la web vuelve sola.
+  RewriteCond %{TIME} <20260902080000
+
+  # (2) Tu IP: OPCIONAL. Sustituye 0.0.0.0 por tu IP publica
+  #     (la ves en https://ifconfig.me) si quieres seguir viendo la web tu.
+  #     Si no lo tocas, se bloquea a todo el mundo.
   RewriteCond %{REMOTE_ADDR} !^0\.0\.0\.0$
 
-  # No bloquear la propia pagina de mantenimiento
-  # (no hace falta excluir css/js: maintenance.html lleva los estilos dentro)
+  # (3) No bloquear la propia pagina de aviso
+  #     (lleva los estilos dentro, no necesita css ni js externos)
   RewriteCond %{REQUEST_URI} !^/maintenance\.html$
 
-  # Devolver 503 (correcto para SEO: es temporal, no borra el posicionamiento)
+  # Devolver 503: le dice a Google que es temporal y NO pierdes posicionamiento
   RewriteRule ^ /maintenance.html [R=503,L]
 </IfModule>
 
 ErrorDocument 503 /maintenance.html
 
 <IfModule mod_headers.c>
-  # Pide a buscadores y navegadores que reintenten en 1 hora
-  Header always set Retry-After "3600"
+  # Reintentar en 24h: coherente con un cierre de varios dias
+  Header always set Retry-After "86400"
   Header always set Cache-Control "no-store, no-cache, must-revalidate"
 </IfModule>
+
+# ------------------------------------------------------------
+# NOTA SOBRE LA HORA
+# %{TIME} usa la hora del SERVIDOR, que no siempre es la de Madrid
+# (muchos hostings van en UTC, 2h menos en verano). En el peor caso la
+# web se reabre un par de horas mas tarde de lo previsto, nada grave.
+# Si quieres precision, mira la hora del servidor en el panel de tu
+# hosting y ajusta el numero en consecuencia.
+# ------------------------------------------------------------
