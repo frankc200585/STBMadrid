@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Intérprete en carrusel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Lo que en el artifact pone el publicador de Claude y aquí hay que poner a mano. */
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font:14px system-ui,-apple-system,sans-serif}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<style>
+/* Misma familia que la Fase 0: el móvil manda en el centro, los mandos al lado.
+   Lo único nuevo: dos voces, así que dos acentos — el tuyo (ámbar) y el del otro (verde azulado). */
+:root{
+  --bg:#eceef1; --panel:#fbfcfd; --line:#d3d8df; --fg:#161b22; --fg2:#5b6572;
+  --senal:#b8690a; --senal-sobre:#ffffff; --otro:#0f6e7a; --otro-sobre:#ffffff;
+  --aviso:#b3262c; --ok:#1d6b4f;
+  --pant:#0e1620; --pant-fg:#e8edf2;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --cuerpo:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  --dato:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1118; --panel:#141b24; --line:#28323f; --fg:#e8edf2; --fg2:#93a0b0;
+  --senal:#f0a32c; --senal-sobre:#1a1205; --otro:#4ec8d6; --otro-sobre:#05171a;
+  --aviso:#f06a6a; --ok:#4bbd8d;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0c1118; --panel:#141b24; --line:#28323f; --fg:#e8edf2; --fg2:#93a0b0;
+  --senal:#f0a32c; --senal-sobre:#1a1205; --otro:#4ec8d6; --otro-sobre:#05171a;
+  --aviso:#f06a6a; --ok:#4bbd8d;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--cuerpo);line-height:1.5;margin:0}
+.envoltura{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,4.5vw,2.1rem);letter-spacing:-.02em;margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--fg2);margin:0 0 4px;max-width:62ch}
+.eyebrow{font-family:var(--dato);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--senal);margin:0 0 10px}
+.escena{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:28px;align-items:start;margin-top:26px}
+@media (max-width:760px){.escena{grid-template-columns:1fr}}
+
+/* ---------- el móvil ---------- */
+.movil{position:relative;width:100%;max-width:300px;margin:0 auto;aspect-ratio:9/19;background:#000;border-radius:30px;padding:7px;box-shadow:0 18px 40px -18px rgba(0,0,0,.55),0 0 0 1px var(--line)}
+.pantalla{position:relative;width:100%;height:100%;border-radius:24px;overflow:hidden;background:var(--pant);color:var(--pant-fg);font-size:11px}
+.muesca{position:absolute;top:6px;left:50%;transform:translateX(-50%);width:34%;height:14px;background:#000;border-radius:9px;z-index:40}
+.estado{font-size:.8rem;color:var(--fg2);text-align:center;margin:10px auto 0;max-width:300px;min-height:3.9em;line-height:1.35}
+
+/* la pantalla de reposo del intérprete: lo que hay debajo del carrusel */
+.reposo{position:absolute;inset:0;padding:13% 7% 7%;display:flex;flex-direction:column}
+.reposo .rotulo-app{font-family:var(--dato);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#7c8c9e;display:flex;align-items:center;gap:6px}
+.punto{width:6px;height:6px;border-radius:50%;background:var(--ok);flex:0 0 auto}
+.historial{margin-top:auto;display:flex;flex-direction:column;gap:7px;padding-bottom:20%}
+.vuelta{border-left:2px solid #2a3744;padding-left:7px;opacity:.5}
+.vuelta.mio{border-left-color:var(--senal)}
+.vuelta.suyo{border-left-color:var(--otro)}
+.vuelta .q{font-family:var(--dato);font-size:7.5px;letter-spacing:.07em;text-transform:uppercase;color:#8698ab}
+.vuelta .t{font-size:10px;line-height:1.3;color:#c3d0dd}
+.niveles{position:absolute;left:7%;right:7%;bottom:6%;display:flex;align-items:flex-end;gap:3px;height:9%}
+.niveles i{flex:1;background:#2a3744;border-radius:1px;height:18%}
+
+/* ---------- el carrusel ---------- */
+.capa{position:absolute;inset:0;z-index:30;pointer-events:none}
+.cursor{position:absolute;width:15%;height:1.8%;min-height:8px;background:var(--pant-fg);border-radius:2px;opacity:0}
+/* La banda, en el mismo sitio que en la Fase 0. El borde de la izquierda dice de quién es la voz. */
+.banda{position:absolute;left:2.8%;top:4.3%;width:0;max-width:94.4%;height:8%;background:linear-gradient(90deg,rgba(14,22,32,.97),rgba(20,32,46,.95));border:1px solid rgba(240,163,44,.5);border-left:4px solid var(--senal);border-radius:7px;overflow:hidden;opacity:0;backdrop-filter:blur(2px)}
+.banda .pista{position:absolute;inset:0;display:flex;align-items:center;gap:7px;padding:0 9px;white-space:nowrap;width:max-content}
+.banda .quien{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:-.01em}
+.banda .texto{font-size:12px;color:#cfdae6}
+.chip{font-family:var(--dato);font-size:8px;letter-spacing:.08em;border-radius:3px;padding:1px 4px;text-transform:uppercase}
+.chip.tu{background:var(--senal);color:var(--senal-sobre)}
+.chip.el{background:var(--otro);color:var(--otro-sobre)}
+.chip.tercera{background:var(--aviso);color:#fff}
+
+/* lo que se dijo de verdad, debajo de la banda: el original */
+.original{position:absolute;left:2.8%;top:13.2%;max-width:94.4%;font-size:9.5px;line-height:1.35;color:#8698ab;padding:0 3px;opacity:0}
+.original b{color:#aebdcc;font-weight:500}
+
+/* quien está hablando / qué se está pronunciando */
+.salida{position:absolute;left:5%;right:5%;bottom:5%;background:rgba(12,19,28,.97);border:1px solid rgba(240,163,44,.45);border-radius:11px;padding:9px 10px;z-index:35;opacity:0;transform:translateY(12px)}
+.salida .cab{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+.salida .cab span.et{font-family:var(--dato);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:#9fb0c2}
+.bocina{width:9px;height:9px;border-radius:2px;background:var(--ok);flex:0 0 auto}
+.via{font-family:var(--dato);font-size:7.5px;letter-spacing:.06em;text-transform:uppercase;border:1px solid #37485a;border-radius:3px;padding:1px 4px;color:#9fb0c2}
+.dicho{font-size:12px;line-height:1.45;min-height:2.6em}
+.dicho u{text-decoration:none;border-bottom:2px solid var(--senal);padding-bottom:1px}
+.nota-salida{font-size:9px;color:#8698ab;margin-top:6px;line-height:1.35}
+
+/* aviso de tercera voz */
+.tercera{position:absolute;left:2.8%;right:2.8%;top:14%;border:1px solid var(--aviso);background:rgba(12,19,28,.97);border-radius:7px;padding:9px;z-index:36;color:#cfdae6;font-size:10px;line-height:1.4;opacity:0}
+.tercera b{font-family:var(--display)}
+
+/* ---------- mandos ---------- */
+.mandos{display:grid;gap:16px;min-width:0}
+.grupo{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+.grupo.ajustes{border-left:3px solid var(--senal)}
+.grupo h2{font-family:var(--display);font-weight:700;font-size:.9rem;margin:0 0 3px;letter-spacing:-.01em}
+.grupo p{margin:0 0 11px;font-size:.82rem;color:var(--fg2)}
+.rotulo{font-family:var(--dato);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--fg2);margin:13px 0 6px}
+.rotulo:first-of-type{margin-top:0}
+.fila{display:flex;flex-wrap:wrap;gap:7px}
+.fila button{font-family:var(--cuerpo);font-weight:500;font-size:.82rem;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+.fila button[aria-pressed="true"]{background:var(--senal);border-color:var(--senal);color:var(--senal-sobre);font-weight:600}
+.fila button:focus-visible{outline:2px solid var(--senal);outline-offset:2px}
+.vueltas{list-style:none;margin:13px 0 0;padding:0;display:grid;gap:0}
+.vueltas li{display:grid;grid-template-columns:4.6rem 1fr;gap:10px;font-size:.82rem;align-items:baseline;padding:7px 0;border-top:1px solid var(--line)}
+.vueltas li.activo{color:var(--fg)}
+.vueltas li:not(.activo){color:var(--fg2)}
+.vueltas .pc{font-family:var(--dato);font-size:.72rem;font-variant-numeric:tabular-nums}
+.vueltas li.mio .pc{color:var(--senal)}
+.vueltas li.suyo .pc{color:var(--otro)}
+.vueltas b{font-weight:600}
+.pregunta{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--senal);border-radius:12px;padding:14px;margin-top:22px}
+.pregunta h2{font-family:var(--display);font-weight:700;font-size:.95rem;margin:0 0 9px}
+.pregunta ol{margin:0;padding-left:1.15rem;display:grid;gap:10px;font-size:.88rem}
+.pregunta li::marker{color:var(--senal);font-family:var(--dato)}
+.choque{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--aviso);border-radius:12px;padding:14px;margin-top:22px}
+.choque h2{font-family:var(--display);font-weight:700;font-size:.95rem;margin:0 0 9px}
+.choque p{margin:0 0 9px;font-size:.88rem}
+.choque p:last-child{margin-bottom:0}
+.hecho{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--ok);border-radius:12px;padding:14px;margin-top:22px}
+.hecho h2{font-family:var(--display);font-weight:700;font-size:.95rem;margin:0 0 9px}
+.hecho ul{margin:0;padding-left:1.1rem;display:grid;gap:6px;font-size:.86rem;color:var(--fg2)}
+.hecho ul b{color:var(--fg);font-weight:600}
+.cierre{color:var(--fg2);font-size:.8rem;margin-top:18px;max-width:64ch}
+code{font-family:var(--dato);font-size:.9em}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="envoltura">
+  <p class="eyebrow">Fase 3 · modo intérprete, decisión 12</p>
+  <h1>Intérprete en carrusel</h1>
+  <p class="sub">Una conversación cara a cara entre dos personas. El móvil <b>conoce tu voz de memoria</b>: lo que dices tú sale por el altavoz en el idioma del otro, y lo que dice él te llega traducido en la banda del carrusel. <b>No hay nada que abrir ni nada que tocar</b> mientras habláis.</p>
+
+  <div class="escena">
+    <div>
+      <div class="movil">
+        <div class="pantalla" id="pantalla">
+          <div class="muesca"></div>
+
+          <div class="reposo">
+            <p class="rotulo-app"><span class="punto"></span> Intérprete · escuchando</p>
+            <div class="historial" id="historial"></div>
+            <div class="niveles" id="niveles"></div>
+          </div>
+
+          <div class="capa">
+            <div class="cursor" id="cursor"></div>
+            <div class="banda" id="banda">
+              <div class="pista" id="pista">
+                <span class="chip tu" id="chip">Tu voz</span>
+                <span class="quien" id="quien">Tú</span>
+                <span class="texto" id="texto">—</span>
+              </div>
+            </div>
+            <p class="original" id="original"><b>Dijo:</b> <span id="orig-texto">—</span></p>
+          </div>
+
+          <div class="tercera" id="aviso-tercera">
+            <b>Una tercera voz.</b> No es la tuya y no es la de él. Ahora mismo el intérprete no sabe qué hacer con ella: por eso está en las preguntas.
+          </div>
+
+          <div class="salida" id="salida">
+            <div class="cab">
+              <span class="bocina" id="bocina"></span>
+              <span class="et" id="et-salida">Pronunciando</span>
+              <span class="via" id="via">Altavoz</span>
+            </div>
+            <p class="dicho" id="dicho"></p>
+            <p class="nota-salida" id="nota-salida">Lo subrayado es donde el intérprete eligió el sentido y no la palabra.</p>
+          </div>
+        </div>
+      </div>
+      <p class="estado" id="estado">Pulsa «Repetir» para oír la conversación entera.</p>
+    </div>
+
+    <div class="mandos">
+      <div class="grupo">
+        <h2>La conversación</h2>
+        <p>Cuatro vueltas en la puerta de la finca. Toca una para ir a ella.</p>
+        <div class="fila">
+          <button type="button" id="btn-play" style="font-family:var(--display);font-weight:700">Repetir</button>
+          <button type="button" id="btn-siguiente">Vuelta siguiente</button>
+        </div>
+        <ul class="vueltas" id="vueltas"></ul>
+      </div>
+
+      <div class="grupo">
+        <h2>Las dos voces</h2>
+        <p>Decisión 12: tu voz se reconoce de memoria, porque eres el dueño del móvil. Todo lo que no es tu voz es «el otro».</p>
+        <p class="rotulo">El otro tiene nombre puesto</p>
+        <div class="fila" id="nombres">
+          <button type="button" data-nombre="1" aria-pressed="true">Sí: Marie</button>
+          <button type="button" data-nombre="0" aria-pressed="false">No: «una persona»</button>
+        </div>
+        <p class="rotulo">Y si habla alguien más</p>
+        <div class="fila" id="terceras">
+          <button type="button" data-tercera="0" aria-pressed="true">Solo los dos</button>
+          <button type="button" data-tercera="1" aria-pressed="false">Se mete una tercera voz</button>
+        </div>
+      </div>
+
+      <div class="grupo">
+        <h2>Por dónde sale</h2>
+        <p>Si todo sale por el altavoz, te oyes a ti mismo en un idioma que no hablas. Pruébalo de las dos formas: es la decisión más gorda que queda.</p>
+        <div class="fila" id="vias">
+          <button type="button" data-via="altavoz" aria-pressed="true">Todo por el altavoz</button>
+          <button type="button" data-via="partido" aria-pressed="false">Él por el altavoz, tú por el auricular</button>
+        </div>
+      </div>
+
+      <div class="grupo">
+        <h2>Lo que se queda en pantalla</h2>
+        <p>Para poder volver a leer «¿qué ha dicho?». Nada de esto sale del móvil (decisión 13).</p>
+        <div class="fila" id="memorias">
+          <button type="button" data-memoria="0" aria-pressed="false">Solo la vuelta de ahora</button>
+          <button type="button" data-memoria="3" aria-pressed="true">Las tres últimas</button>
+        </div>
+      </div>
+
+      <div class="grupo ajustes">
+        <h2>Ajustes</h2>
+        <p>Los mismos de la decisión 16, que valen para todo el Carousel.</p>
+        <p class="rotulo">Grosor del cursor y de la banda</p>
+        <div class="fila" id="grosores">
+          <button type="button" data-grosor="fino" aria-pressed="false">Fino</button>
+          <button type="button" data-grosor="medio" aria-pressed="true">Medio</button>
+          <button type="button" data-grosor="grueso" aria-pressed="false">Grueso</button>
+        </div>
+        <p class="rotulo">Tamaño de letra</p>
+        <div class="fila" id="letras">
+          <button type="button" data-letra="pequena" aria-pressed="false">Pequeña</button>
+          <button type="button" data-letra="media" aria-pressed="true">Media</button>
+          <button type="button" data-letra="grande" aria-pressed="false">Grande</button>
+        </div>
+        <p class="rotulo">Velocidad del carrusel</p>
+        <div class="fila" id="vcars">
+          <button type="button" data-vcar="muylento" aria-pressed="false">Muy lento</button>
+          <button type="button" data-vcar="lento" aria-pressed="false">Lento</button>
+          <button type="button" data-vcar="medio" aria-pressed="true">Medio</button>
+          <button type="button" data-vcar="rapido" aria-pressed="false">Rápido</button>
+          <button type="button" data-vcar="muyrapido" aria-pressed="false">Muy rápido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hecho">
+    <h2>Lo que ya dijiste, puesto aquí</h2>
+    <ul>
+      <li><b>Decisión 12.</b> Uno a uno, dos voces, tu voz de memoria, y «una persona» cuando el otro no tiene nombre puesto. Pruébalo con los dos botones de «El otro tiene nombre puesto».</li>
+      <li><b>Y una cosa buena que sale de ahí:</b> para distinguirte solo hace falta <b>tu</b> huella de voz. La del otro <b>no se guarda nunca</b>, porque «el otro» es simplemente «el que no eres tú». Es la forma más limpia de cumplir el aviso del RGPD sobre la voz.</li>
+      <li><b>Decisión 13, cero retención.</b> Aquí no hay segundo móvil ni intermediario: si el reconocimiento y la traducción van dentro del aparato, esta es la única parte del Carousel donde «no queda nada» es literal.</li>
+      <li><b>Decisión 16.</b> Grosor, letra y velocidad, los mismos mandos que en la Fase 0.</li>
+      <li><b>Decisión 17.</b> El eje es contestar sin salir de lo que estás haciendo. Hablando con alguien, lo que estás haciendo <b>es</b> la conversación: aquí los clics ya son cero, sin tener que medirlo.</li>
+    </ul>
+  </div>
+
+  <div class="choque">
+    <h2>Un choque que hay que resolver antes de programar</h2>
+    <p><b>La decisión 9 dice que lo que se dicta nunca se envía solo</b>: se marca lo que cambió el corrector y lo pulsas tú. Eso tiene todo el sentido en un mensaje. <b>En una conversación cara a cara no se puede.</b> Si cada frase hay que leerla y confirmarla, se acaba la conversación — y se acaba el motivo del producto, que es no tocar nada.</p>
+    <p>Lo que propongo: en modo intérprete <b>se pronuncia sin confirmar</b>, y la confianza se gana al revés — <b>se enseña siempre el original</b> debajo de la banda («Dijo: …») y se <u>subraya</u> dónde el intérprete eligió el sentido en vez de la palabra. Así tú ves que ha cambiado algo sin tener que parar. Lo tienes en la pantalla, en la cuarta vuelta: «Solo faltas tú» no se puede traducir palabra por palabra.</p>
+    <p><b>Esto toca la decisión 9, y la decisión 9 es tuya.</b> No se programa el intérprete hasta que digas si vale esta salida o quieres otra.</p>
+  </div>
+
+  <div class="pregunta">
+    <h2>Lo que falta que decidas</h2>
+    <ol>
+      <li><b>¿Por dónde sale cada voz?</b> Si todo va al altavoz, tú te oyes traducido a ti mismo y estorba. Si se parte (él al altavoz, tú al auricular), funciona mejor pero <b>obliga a llevar un auricular puesto</b> para usar el intérprete. Pruébalo con los dos botones de «Por dónde sale» y dime cuál.</li>
+      <li><b>¿Traduce al acabar la frase, o mientras habla?</b> Al acabar es fiel pero deja un silencio de dos o tres segundos en cada vuelta; mientras habla es rápido pero se corrige a mitad y se oye raro. Yo pondría <b>al acabar la frase</b>, porque una conversación aguanta mejor un silencio que una frase que se desdice.</li>
+      <li><b>¿Y si habla una tercera persona?</b> Ahora mismo cualquier voz que no sea la tuya es «el otro», así que un camarero entra como si fuera Marie. Pruébalo con «Se mete una tercera voz». Opciones: no traducirla, o decir «otra persona» y traducirla igual. La segunda es más útil y más fácil de equivocarse.</li>
+      <li><b>¿El idioma del otro se detecta solo, o lo pones antes?</b> Detectarlo solo es más cómodo y falla con las frases de dos palabras («Yes», «OK»), que son justo las más comunes. Ponerlo antes es un toque de más al empezar y no falla nunca.</li>
+      <li><b>¿Cuánto se queda en pantalla?</b> Las tres últimas vueltas sirven para volver a leer «¿qué ha dicho?»; solo la de ahora es más limpio y más privado si alguien mira el móvil. Está en «Lo que se queda en pantalla».</li>
+    </ol>
+  </div>
+
+  <p class="cierre">Esto es el dibujo del modo intérprete para aprobarlo antes de programar nada, igual que se hizo con la Fase 0. Decisiones, riesgos y lo investigado: <code>PROYECTOS/CARRUSEL-MENSAJES.md</code>. El recorrido de un mensaje entre dos personas: <code>PROYECTOS/carrusel/RECORRIDO.md</code>.</p>
+</div>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i);};
+  var cursor=$("cursor"), banda=$("banda"), pista=$("pista"), chip=$("chip"),
+      quien=$("quien"), texto=$("texto"), original=$("original"), origTexto=$("orig-texto"),
+      salida=$("salida"), dicho=$("dicho"), bocina=$("bocina"), etSalida=$("et-salida"),
+      via=$("via"), notaSalida=$("nota-salida"), avisoTercera=$("aviso-tercera"),
+      historial=$("historial"), niveles=$("niveles"), estado=$("estado"),
+      listaVueltas=$("vueltas");
+
+  // Velocidades y medidas: las mismas de la Fase 0 (decisión 16).
+  var DURS={muylento:8000,lento:6000,medio:4200,rapido:3000,muyrapido:2000};
+  var GROS={fino:{h:1.1,min:5,b:3},medio:{h:1.8,min:8,b:4},grueso:{h:2.6,min:11,b:6}};
+  var LETRA={pequena:{t:10,alto:7},media:{t:12,alto:8},grande:{t:14,alto:9.3}};
+  var BTOP=4.3;
+
+  var AJ={grosor:"medio",letra:"media",vcar:"medio"};
+  var conNombre=true, conTercera=false, modoVia="altavoz", memoria=3;
+
+  // La conversación: en la puerta de la finca. Solo datos que ya están escritos en el repo
+  // («desde 15 €», «¿te apunto a la lista?», parking, «Solo faltas tú»): no se inventa nada.
+  var TURNOS=[
+    {de:"el", idioma:"inglés",
+     orig:"Hi — do I need a ticket, or can I pay at the door?",
+     trad:"Hola, ¿necesito entrada o puedo pagar en la puerta?"},
+    {de:"tu", idioma:"español",
+     orig:"Desde quince euros. ¿Te apunto a la lista?",
+     trad:"From fifteen euros. Shall I put you on the list?"},
+    {de:"el", idioma:"inglés",
+     orig:"Yes please. Is there parking?",
+     trad:"Sí, por favor. ¿Hay parking?"},
+    {de:"tu", idioma:"español",
+     orig:"Sí, hay parking. Solo faltas tú.",
+     // «Solo faltas tú» es la frase de la casa y no se puede traducir palabra por palabra:
+     // aquí es donde se ve que el intérprete elige el sentido. Lo marcado va subrayado.
+     trad:"Yes, there's parking. ", tradMarcado:"We're just waiting for you.",
+     literal:"Only you are missing."}
+  ];
+  var TERCERA={de:"tercera", idioma:"español",
+     orig:"¿Os pongo algo de beber?",
+     trad:"Can I get you something to drink?"};
+
+  var i=0, fase="quieto", p=0, t0=null, raf=null, autoT=null, pulsoT=null, nivelT=null;
+  var quieto=matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  function turnos(){
+    if(!conTercera) return TURNOS;
+    return TURNOS.slice(0,2).concat([TERCERA], TURNOS.slice(2));
+  }
+  function nombreDe(de){
+    if(de==="tu") return "Tú";
+    if(de==="tercera") return "Otra persona";
+    return conNombre?"Marie":"Una persona";
+  }
+  function etiquetaDe(de){
+    if(de==="tu") return {clase:"tu", t:"Tu voz"};
+    if(de==="tercera") return {clase:"tercera", t:"3.ª voz"};
+    return {clase:"el", t:conNombre?"Marie":"No eres tú"};
+  }
+  function acentoDe(de){
+    if(de==="tu") return "var(--senal)";
+    if(de==="tercera") return "var(--aviso)";
+    return "var(--otro)";
+  }
+  // Por dónde se oye cada voz. Lo tuyo lo escucha el otro; lo suyo lo escuchas tú.
+  function viaDe(de){
+    if(modoVia==="altavoz") return "Altavoz";
+    return de==="tu" ? "Altavoz" : "Auricular";
+  }
+  function decir(t){estado.textContent=t;}
+
+  function medidas(){
+    var g=GROS[AJ.grosor], l=LETRA[AJ.letra];
+    cursor.style.height=g.h+"%"; cursor.style.minHeight=g.min+"px";
+    banda.style.borderLeftWidth=g.b+"px";
+    banda.style.height=l.alto+"%";
+    texto.style.fontSize=l.t+"px"; quien.style.fontSize=l.t+"px"; dicho.style.fontSize=l.t+"px";
+    original.style.top=(BTOP+l.alto+1)+"%";
+  }
+
+  // El cursor entra por el lado de quien habla: el tuyo desde tu lado, el suyo desde el otro.
+  function salidaCursor(de){ return de==="tu" ? {x:78,y:88} : {x:4,y:88}; }
+  function suave(u){return u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;}
+  function entre(a,b,u){return a+(b-a)*u;}
+  function tramo(x,a,b){return Math.max(0,Math.min(1,(x-a)/(b-a)));}
+
+  function pintarVueltas(){
+    var ts=turnos();
+    listaVueltas.innerHTML="";
+    ts.forEach(function(t,n){
+      var li=document.createElement("li");
+      li.className=(t.de==="tu"?"mio":"suyo")+(n===i?" activo":"");
+      li.innerHTML='<span class="pc">'+(n+1)+' · '+nombreDe(t.de)+'</span>'+
+                   '<span><b>'+t.orig.replace(/</g,"&lt;")+'</b></span>';
+      li.style.cursor="pointer";
+      li.addEventListener("click",function(){ i=n; arrancar(); });
+      listaVueltas.appendChild(li);
+    });
+  }
+
+  function pintarHistorial(){
+    var ts=turnos();
+    historial.innerHTML="";
+    if(memoria===0) return;
+    var desde=Math.max(0,i-memoria), hasta=i;
+    for(var n=desde;n<hasta;n++){
+      var t=ts[n], d=document.createElement("div");
+      d.className="vuelta "+(t.de==="tu"?"mio":"suyo");
+      d.innerHTML='<p class="q">'+nombreDe(t.de)+'</p><p class="t">'+
+                  (t.de==="tu"?t.orig:t.trad).replace(/</g,"&lt;")+'</p>';
+      historial.appendChild(d);
+    }
+  }
+
+  function colocar(c,parado){
+    var A=banda.clientWidth, W=pista.scrollWidth;
+    if(W<=A){ pista.style.transform="translateX(0)"; return; }   // si cabe, no hace falta carrusel
+    pista.style.transform="translateX("+(parado?Math.min(0,A-W):(A-(A+W)*c))+"px)";
+  }
+
+  function pintar(){
+    var ts=turnos(), t=ts[i], et=etiquetaDe(t.de), ac=acentoDe(t.de);
+    var s=salidaCursor(t.de), uc=suave(tramo(p,0,.38));
+    var l=LETRA[AJ.letra], g=GROS[AJ.grosor];
+    var destino={x:2.8, y:BTOP+l.alto/2-g.h/2};
+
+    cursor.style.background=ac;
+    cursor.style.boxShadow="0 0 14px 2px "+ac;
+    cursor.style.left=entre(s.x,destino.x,uc)+"%";
+    cursor.style.top=entre(s.y,destino.y,uc)+"%";
+    cursor.style.opacity=p<.02?0:(p>.52?Math.max(0,1-tramo(p,.52,.62)):1);
+
+    banda.style.borderLeftColor=ac;
+    var ub=suave(tramo(p,.30,.50));
+    banda.style.width=(94.4*ub)+"%";
+    banda.style.opacity=ub>0?1:0;
+
+    var um=tramo(p,.40,.88);
+    if(um>=1) colocar(0,true); else colocar(um%1,false);
+
+    original.style.opacity=suave(tramo(p,.42,.58));
+    salida.style.borderColor=ac;
+    var us=suave(tramo(p,.50,.66));
+    salida.style.opacity=us;
+    salida.style.transform="translateY("+entre(12,0,us)+"px)";
+
+    chip.className="chip "+et.clase; chip.textContent=et.t;
+    quien.textContent=nombreDe(t.de);
+    quien.style.color=ac;
+    avisoTercera.style.opacity = (t.de==="tercera" && p>.45) ? 1 : 0;
+  }
+
+  function texto_de(t){
+    // En la banda va lo que TÚ tienes que leer: si habla él, la traducción al español;
+    // si hablas tú, lo que va a oír él.
+    return t.de==="tu" ? (t.trad+(t.tradMarcado||"")) : t.trad;
+  }
+
+  function cargar(){
+    var ts=turnos(), t=ts[i];
+    texto.textContent = texto_de(t);
+    origTexto.textContent = t.orig;
+    via.textContent = viaDe(t.de);
+    etSalida.textContent = t.de==="tu" ? "Pronunciando para "+nombreDe("el") : "Pronunciando para ti";
+    bocina.style.background = (modoVia==="partido" && t.de!=="tu") ? "var(--senal)" : "var(--ok)";
+    if(t.tradMarcado){
+      dicho.innerHTML = t.trad.replace(/</g,"&lt;")+"<u>"+t.tradMarcado.replace(/</g,"&lt;")+"</u>";
+      notaSalida.textContent = "Palabra por palabra sería «"+t.literal+"», que no dice nada. "+
+                               "Lo subrayado es donde el intérprete eligió el sentido.";
+    }else{
+      dicho.textContent = t.trad;
+      notaSalida.textContent = "Debajo de la banda tienes siempre lo que se dijo de verdad, sin traducir.";
+    }
+    medidas(); pintarVueltas(); pintarHistorial();
+  }
+
+  function latido(ts){
+    if(fase!=="vuelta"){raf=null;return;}
+    if(t0===null) t0=ts;
+    p=Math.min(1,(ts-t0)/DURS[AJ.vcar]);
+    pintar();
+    if(p<1) raf=requestAnimationFrame(latido);
+    else{ raf=null; reposar(); }
+  }
+
+  function arrancar(){
+    limpiar(); fase="vuelta"; p=0; t0=null; cargar(); pintar();
+    var t=turnos()[i];
+    decir(t.de==="tu"
+      ? "Hablas tú. Reconoce tu voz de memoria y lo pronuncia en el idioma de "+nombreDe("el")+"."
+      : (t.de==="tercera"
+         ? "Habla alguien que no eres tú ni es "+nombreDe("el")+". Ahí es donde falta decidir."
+         : "Habla "+nombreDe("el")+". No es tu voz, así que es «el otro», y te llega traducido."));
+    raf=requestAnimationFrame(latido);
+    pulso();
+  }
+
+  function reposar(){
+    fase="reposo";
+    decir("Ahí se queda hasta la vuelta siguiente. Nadie ha tocado la pantalla.");
+    autoT=setTimeout(function(){
+      autoT=null;
+      if(i < turnos().length-1){ i++; arrancar(); }
+      else{ fase="fin"; decir("Fin de la conversación. Cuatro vueltas, cero toques."); apagarPulso(); }
+    }, Math.round(DURS[AJ.vcar]*.55));
+  }
+
+  function pulso(){
+    apagarPulso();
+    bocina.style.transition="opacity .3s";
+    pulsoT=setInterval(function(){
+      bocina.style.opacity = bocina.style.opacity==="0.3" ? "1" : "0.3";
+    },380);
+  }
+  function apagarPulso(){ clearInterval(pulsoT); pulsoT=null; bocina.style.opacity="1"; }
+
+  function limpiar(){
+    clearTimeout(autoT); autoT=null;
+    if(raf){cancelAnimationFrame(raf);raf=null;}
+    apagarPulso();
+  }
+
+  // las barritas de nivel de voz, solo para que la pantalla parezca viva
+  (function(){
+    for(var n=0;n<22;n++) niveles.appendChild(document.createElement("i"));
+    if(quieto) return;
+    var barras=niveles.children;
+    nivelT=setInterval(function(){
+      var activo = fase==="vuelta";
+      for(var n=0;n<barras.length;n++){
+        var h = activo ? 18+Math.random()*78 : 14+Math.random()*8;
+        barras[n].style.height=h+"%";
+        barras[n].style.background = activo ? "rgba(174,189,204,.55)" : "#2a3744";
+      }
+    },140);
+  })();
+
+  function grupo(id,attr,fn){
+    var cont=$(id); if(!cont) return;
+    cont.addEventListener("click",function(e){
+      var b=e.target.closest("button[data-"+attr+"]"); if(!b) return;
+      [].forEach.call(cont.querySelectorAll("button"),function(o){
+        o.setAttribute("aria-pressed",o===b?"true":"false");
+      });
+      fn(b.dataset[attr]);
+    });
+  }
+  grupo("nombres","nombre",function(v){ conNombre = v==="1"; arrancar(); });
+  grupo("terceras","tercera",function(v){
+    conTercera = v==="1"; i=conTercera?2:0; arrancar();
+  });
+  grupo("vias","via",function(v){ modoVia=v; arrancar(); });
+  grupo("memorias","memoria",function(v){ memoria=+v; cargar(); });
+  grupo("grosores","grosor",function(v){ AJ.grosor=v; arrancar(); });
+  grupo("letras","letra",function(v){ AJ.letra=v; arrancar(); });
+  grupo("vcars","vcar",function(v){ AJ.vcar=v; arrancar(); });
+
+  $("btn-play").addEventListener("click",function(){ i=0; arrancar(); });
+  $("btn-siguiente").addEventListener("click",function(){
+    i=(i+1)%turnos().length; arrancar();
+  });
+
+  cargar(); p=1; pintar();
+  if(!quieto) setTimeout(function(){ i=0; arrancar(); },420);
+})();
+</script>
+</body>
+</html>
