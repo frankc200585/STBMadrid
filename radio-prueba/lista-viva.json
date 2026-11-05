@@ -1,5 +1,5 @@
 {
- "rev": 3,
+ "rev": 4,
  "quitar": [],
  "anadir": [
   {
@@ -55,6 +55,156 @@
   {
    "id": "6xbICtgk-nU",
    "titulo": "Rey Ruiz - No Me Acostumbro 💔 (Letra/Lyrics)",
+   "genero": "salsa"
+  },
+  {
+   "id": "9LJQ96l_Ap0",
+   "titulo": "Neutro Shorty x Oscar D' León - Idilio (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "1M8n391NE4M",
+   "titulo": "Neutro Shorty x Gilberto Santa Rosa - Un Consejo (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "A1laenPFj-c",
+   "titulo": "Neutro Shorty - Contigo o Sin Ti (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "pUSo3c2aaeQ",
+   "titulo": "Neutro Shorty - Yo Soy (Videoclip)",
+   "genero": "salsa"
+  },
+  {
+   "id": "JN5svEdBbDI",
+   "titulo": "Neutro Shorty x Porfi Baloa - Infidelidad (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "k6fjjtM9qKk",
+   "titulo": "Neutro Shorty - Tiro En El Pie (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "g7q_4Ryugig",
+   "titulo": "Neutro Shorty - Darién (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "0q9Xmgxp1a4",
+   "titulo": "Neutro Shorty - Cuestión de Piel (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "T3SHGBifCLU",
+   "titulo": "Neutro Shorty - El Malo y El Bueno (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "VeYiW3NScKk",
+   "titulo": "Neutro Shorty - Amiga (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "J2j9Z6VsZ0E",
+   "titulo": "Neutro Shorty - El Malandro y La Princesa (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "PsydAETrwLI",
+   "titulo": "Servando & Florentino, Maelo Ruiz - No Te Vayas (Video Oficial)",
+   "genero": "salsa"
+  },
+  {
+   "id": "6VYUx8HO5mI",
+   "titulo": "Rauw Alejandro - Tú con Él (Live from New York City)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "2SaCiD0wVQY",
+   "titulo": "[93] JUANITO ALIMAÑA - HECTOR LAVOE - (SALSA OLD) - DJ LOCO CABANA-PERU FT. DJ ANTHONY SANCHEZ",
+   "genero": "salsa"
+  },
+  {
+   "id": "h4hwkaJsLBE",
+   "titulo": "Neutro Shorty - Ese Bonche (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "YmGNa55wJc4",
+   "titulo": "Servando & Florentino, Rawayana - Amor de Motel (Video Oficial)",
+   "genero": "salsa"
+  },
+  {
+   "id": "NFyae09vbrk",
+   "titulo": "Tony Vega - Esa Mujer | Intimo 2 - Live",
+   "genero": "salsa"
+  },
+  {
+   "id": "YBBQZJ0dFtU",
+   "titulo": "De Mi Enamorate - Tito Nieves feat. Norberto Vélez (Live Sesiones Desde La Loma) | Norberto Vélez",
+   "genero": "salsa"
+  },
+  {
+   "id": "Y4moB5Nussw",
+   "titulo": "IDILIO  - ALBERTO BARROS (Auditorio Nacional)",
+   "genero": "salsa"
+  },
+  {
+   "id": "9THWXZ_5elA",
+   "titulo": "Servando & Florentino, Neutro Shorty - Eres tú (Video Oficial)",
+   "genero": "salsa"
+  },
+  {
+   "id": "-YkA-t8CIOI",
+   "titulo": "Servando & Florentino - Lunares (Video Oficial)",
+   "genero": "salsa"
+  },
+  {
+   "id": "znCHQPS_3Rs",
+   "titulo": "Servando & Florentino - Lo De Los Dos (Visualizer)",
+   "genero": "salsa"
+  },
+  {
+   "id": "TV2xR9tar0I",
+   "titulo": "SERVANDO & FLORENTINO - Medley Salserin - Reunión de Primera (Live)",
+   "genero": "salsa"
+  },
+  {
+   "id": "00QVU7voMq8",
+   "titulo": "Fonseca - Eres Mi Sueño",
+   "genero": "otro"
+  },
+  {
+   "id": "RksYXExb0d0",
+   "titulo": "Juan Luis Guerra 4.40 - Vale la Pena (Live) (Video Oficial)",
+   "genero": "bachata"
+  },
+  {
+   "id": "2PVi95J-FMo",
+   "titulo": "LUIS ENRIQUE - Yo No Se Mañana (Video Oficial)",
+   "genero": "salsa"
+  },
+  {
+   "id": "bYhmBIsD3ZY",
+   "titulo": "PIEL DE ANGEL - Ronald Borjas -  Joyas Que Bailan",
+   "genero": "salsa"
+  },
+  {
+   "id": "pQXol38PU00",
+   "titulo": "Tito Nieves & Daniela Darcourt - De Mí Enamórate (En Vivo)",
+   "genero": "salsa"
+  },
+  {
+   "id": "c6WnUEPe1_c",
+   "titulo": "Michel el Buenon - A Que Me Quedo Contigo",
+   "genero": "salsa"
+  },
+  {
+   "id": "SqqlNk-kRBE",
+   "titulo": "Como en los Viejos Tiempos, Barrio fino Orquesta (Eden Muños,Salsa)",
    "genero": "salsa"
   }
  ],
