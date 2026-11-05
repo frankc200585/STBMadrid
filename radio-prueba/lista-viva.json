@@ -1,5 +1,5 @@
 {
- "rev": 7,
+ "rev": 8,
  "quitar": [],
  "anadir": [
   {
@@ -691,6 +691,51 @@
    "id": "BVdngsy95mY",
    "titulo": "Myke Towers - Lala (Video Oficial)",
    "genero": "reguetón"
+  },
+  {
+   "id": "AyrmGAS05IQ",
+   "titulo": "Los Titanes - Por Retenerte (Video Oficial)",
+   "genero": "salsa"
+  },
+  {
+   "id": "JLwmBfrbYR4",
+   "titulo": "Los Titanes - Sobredosis (Video Oficial)",
+   "genero": "salsa"
+  },
+  {
+   "id": "GYO3lAD-Rbc",
+   "titulo": "Oscar Quesada - Mi Amante Niña Mi Compañera",
+   "genero": "salsa"
+  },
+  {
+   "id": "_iH_ulxFRkw",
+   "titulo": "Oscar Quesada - Pensándote",
+   "genero": "salsa"
+  },
+  {
+   "id": "fpX1T2K916M",
+   "titulo": "Oscar Quesada - Dire Que Te Amo",
+   "genero": "salsa"
+  },
+  {
+   "id": "l2YLClyDm84",
+   "titulo": "Oscar Quesada - Mi Razón De Ser",
+   "genero": "salsa"
+  },
+  {
+   "id": "A72vnH46hIk",
+   "titulo": "Oscar Quesada y Los Titanes - Compárame",
+   "genero": "salsa"
+  },
+  {
+   "id": "h258iWuIiKY",
+   "titulo": "Oscar Quesada - En Trance",
+   "genero": "salsa"
+  },
+  {
+   "id": "fzfcgk-US9c",
+   "titulo": "Oscar Quesada y Los Titanes - Eres",
+   "genero": "salsa"
   }
  ],
  "poner_ya": "",
@@ -706,6 +751,46 @@
     "Sandy"
    ],
    "archivo": "saludos/saludo-1793883559.mp3"
+  }
+ ],
+ "foco": [
+  {
+   "artista": "Óscar Quesada",
+   "evento": "2026-11-06",
+   "tramo": "semana",
+   "desde": "2026-10-31",
+   "hasta": "2026-11-05",
+   "cuota": 0.1,
+   "ids": [
+    "AyrmGAS05IQ",
+    "JLwmBfrbYR4",
+    "GYO3lAD-Rbc",
+    "_iH_ulxFRkw",
+    "fpX1T2K916M",
+    "l2YLClyDm84",
+    "A72vnH46hIk",
+    "h258iWuIiKY",
+    "fzfcgk-US9c"
+   ]
+  },
+  {
+   "artista": "Óscar Quesada",
+   "evento": "2026-11-06",
+   "tramo": "dia",
+   "desde": "2026-11-06",
+   "hasta": "2026-11-06",
+   "cuota": 0.18,
+   "ids": [
+    "AyrmGAS05IQ",
+    "JLwmBfrbYR4",
+    "GYO3lAD-Rbc",
+    "_iH_ulxFRkw",
+    "fpX1T2K916M",
+    "l2YLClyDm84",
+    "A72vnH46hIk",
+    "h258iWuIiKY",
+    "fzfcgk-US9c"
+   ]
   }
  ]
 }
