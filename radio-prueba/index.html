@@ -28,6 +28,8 @@ button.sec{background:transparent;color:var(--fg);border:1px solid var(--mut)}
   <div id="yt"><div id="ytp"></div></div>
   <div id="aviso"><button id="seguir">▶ Toca para seguir con la música</button></div>
   <div class="row"><button id="play">▶ Empezar</button><button class="sec" id="sig">⏭</button></div>
+  <div class="row"><button class="sec" id="quitar" style="flex:1">🚫 Quitar este tema</button></div>
+  <p class="mut" id="vivo" style="margin:.6em 0 0;font-size:.85rem"></p>
   <p class="mut" style="margin:.8em 0 0">Con la pantalla bloqueada, <b>pausa = silenciar</b> y <b>play = volver el sonido</b>: la radio sigue «en directo» por debajo.</p>
 </div>
 <div class="card">
@@ -47,13 +49,13 @@ button.sec{background:transparent;color:var(--fg);border:1px solid var(--mut)}
 <script>
 "use strict";
 var $=function(i){return document.getElementById(i)},A=$("a"),H=$("h"),P=null,reg=[],t0=Date.now();
-var Q={temas:[],voces:[],ti:0,vi:0,cuenta:0,cada:2,tipo:"",empezado:false},silencio=false,YT=null,ytListo=false,ytPend=null;
+var VIVO={rev:-1,saltar:0,poner:""},QUIT={},EXTRA=[],Q={temas:[],voces:[],ti:0,vi:0,cuenta:0,cada:2,tipo:"",empezado:false},silencio=false,YT=null,ytListo=false,ytPend=null;
 function L(m){var s=((Date.now()-t0)/1000).toFixed(1)+"s "+m;reg.push(s);$("log").textContent=reg.slice(-50).join("\n");$("log").scrollTop=1e9}
 function medir(a){try{if(P&&P.medidor)navigator.sendBeacon(P.medidor+"?a="+encodeURIComponent(a))}catch(e){}}
 function idYT(s){s=(s||"").trim();var m=s.match(/(?:v=|youtu\.be\/|shorts\/|embed\/|live\/)([A-Za-z0-9_-]{11})/);if(m)return m[1];return /^[A-Za-z0-9_-]{11}$/.test(s)?s:null}
 function guardada(){try{return (localStorage.getItem("stb-yt")||"").split("\n").filter(Boolean)}catch(e){return []}}
 function mezclar(a){a=a.slice();for(var k=a.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),t=a[k];a[k]=a[j];a[j]=t}return a}
-function cargarTemas(){var l=guardada().map(idYT).filter(Boolean);if(P)l=l.concat((P.youtube||[]).map(idYT).filter(Boolean));l=l.filter(function(x,k){return l.indexOf(x)===k});Q.todos=l;Q.temas=l;Q.ti=0;G={};$("nl").textContent=l.length+" temas"}
+function cargarTemas(){var l=guardada().map(idYT).filter(Boolean);if(P)l=l.concat((P.youtube||[]).map(idYT).filter(Boolean));l=l.filter(function(x,k){return l.indexOf(x)===k});l=l.concat(EXTRA.map(function(e){return e.id})).filter(function(x,k,a){return a.indexOf(x)===k&&!QUIT[x]});Q.todos=l;Q.temas=l;Q.ti=0;G={};$("nl").textContent=l.length+" temas"}
 function ms(t,a){if(!("mediaSession" in navigator))return;try{navigator.mediaSession.metadata=new MediaMetadata({title:t,artist:a||"STB Radio",album:"STB Radio",artwork:[{src:"icon-512.png",sizes:"512x512",type:"image/png"},{src:"icon-180.png",sizes:"180x180",type:"image/png"}]});navigator.mediaSession.playbackState=silencio?"paused":"playing"}catch(e){}}
 function estado(){ $("play").textContent=!Q.empezado?"▶ Empezar":(silencio?"🔊 Volver el sonido":"🔇 Silenciar");
   if("mediaSession" in navigator)try{navigator.mediaSession.playbackState=silencio?"paused":"playing"}catch(e){} }
@@ -67,7 +69,7 @@ function ytPonerId(id,titulo){
   function ir(){ if(!YT){YT=new window.YT.Player("ytp",{videoId:id,playerVars:{playsinline:1,rel:0,origin:location.origin},events:{
       onReady:function(e){ if(silencio)e.target.mute(); e.target.playVideo() },
       onStateChange:function(e){var s=e.data;
-        if(s===1){aviso(false);var d=e.target.getVideoData();$("tit").textContent="♪ "+(d.title||"YouTube");$("sub").textContent=d.author||"";ms(d.title||"YouTube",d.author);L("suena YT: "+(d.title||id));medir("tema")}
+        if(s===1){aviso(false);var d=e.target.getVideoData();$("tit").textContent="♪ "+(d.title||"YouTube");$("sub").textContent=(d.author||"")+" · "+Q.actual;ms(d.title||"YouTube",d.author);L("suena YT: "+(d.title||id));medir("tema")}
         if(s===0){L("fin YT");siguiente()}},
       onError:function(e){L("ERROR YouTube "+e.data+" (vídeo no incrustable o borrado)");medir("error");setTimeout(siguiente,600)}}})}
     else{YT.loadVideoById(id);}
@@ -78,9 +80,11 @@ function voz(it){pararYT();A.src=it.archivo;A.muted=silencio;$("tit").textConten
 
 // Reparto objetivo: 40 % salsa · 30 % bachata · 30 % resto de ritmos latinos. Se elige el grupo que más lejos va de su cuota; dentro, al azar sin repetir hasta agotar.
 var G={},sonado={salsa:0,bachata:0,resto:0},totalSonado=0;
-function grupo(id){var g=(P&&P.generos&&P.generos[id])||"salsa";return g==="salsa"?"salsa":g==="bachata"?"bachata":"resto"}
+function grupo(id){var g=(P&&P.generos&&P.generos[id])||(EXTRA.filter(function(e){return e.id===id})[0]||{}).genero||"salsa";return g==="salsa"?"salsa":g==="bachata"?"bachata":"resto"}
 function bolsa(g){if(!G[g]||!G[g].length){G[g]=mezclar(Q.todos.filter(function(x){return grupo(x)===g}))}return G[g]}
-function elegir(){var R=(P&&P.reparto)||{salsa:.4,bachata:.3,resto:.3},hay=[],tot=0;
+function elegir(){if(Q.forzar){var f=Q.forzar;Q.forzar="";Q.actual=f;L("puesto en vivo: "+f);return f}
+  var r=elegir0();Q.actual=r;return r}
+function elegir0(){var R=(P&&P.reparto)||{salsa:.4,bachata:.3,resto:.3},hay=[],tot=0;
   ["salsa","bachata","resto"].forEach(function(g){if(Q.todos.some(function(x){return grupo(x)===g})){hay.push(g);tot+=R[g]}});
   if(!hay.length)return Q.todos[0];
   var mejor=hay[0],dm=-9;hay.forEach(function(g){var d=R[g]/tot-(totalSonado?sonado[g]/totalSonado:0);if(d>dm){dm=d;mejor=g}});
@@ -107,6 +111,25 @@ if("mediaSession" in navigator){
 }
 $("cp").onclick=function(){var t=reg.join("\n")+"\n"+navigator.userAgent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){L("copiado")}).catch(function(){window.prompt("Copia esto:",t)})};
 try{$("ytl").value=localStorage.getItem("stb-yt")||""}catch(e){}
-fetch("playlist.json").then(function(r){return r.json()}).then(function(p){P=p;$("nombre").textContent=p.nombre;Q.voces=p.pista.filter(function(x){return x.tipo==="voz"});Q.cada=p.cada_temas||2;cargarTemas();L("lista cargada: "+Q.voces.length+" locuciones, "+Q.temas.length+" temas")}).catch(function(){L("no se pudo cargar playlist.json")});
+
+// Control en vivo (Franklin habla con Claude y Claude edita lista-viva.json en GitHub; la radio lo lee cada ~90 s, sin subir nada al hosting).
+var VIVO_URL="https://api.github.com/repos/frankc200585/STBMadrid/contents/radio-prueba/lista-viva.json?ref=main";
+function aplicarViva(v){
+  if(v.rev===VIVO.rev)return; var primera=VIVO.rev<0; VIVO.rev=v.rev;
+  (v.quitar||[]).forEach(function(i){QUIT[i]=1});
+  EXTRA=(v.anadir||[]).filter(function(e){return e&&e.id});
+  cargarTemas(); $("vivo").textContent="Lista en vivo v"+v.rev+": +"+EXTRA.length+" añadidos, −"+Object.keys(QUIT).length+" quitados";
+  L("lista en vivo v"+v.rev+" (+"+EXTRA.length+" −"+Object.keys(QUIT).length+")");
+  if(!primera){
+    if(v.poner_ya&&v.poner_nonce!==VIVO.poner){VIVO.poner=v.poner_nonce;Q.forzar=v.poner_ya;if(Q.empezado)siguiente()}
+    else if(v.saltar&&v.saltar!==VIVO.saltar){VIVO.saltar=v.saltar;if(Q.empezado)siguiente()}
+    else if(Q.actual&&QUIT[Q.actual]&&Q.empezado){L("el tema que sonaba se ha quitado: paso al siguiente");siguiente()}
+  }else{VIVO.saltar=v.saltar||0;VIVO.poner=v.poner_nonce||""}
+}
+function vivo(){fetch(VIVO_URL,{headers:{Accept:"application/vnd.github.raw"},cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(aplicarViva).catch(function(){})}
+try{var q0=JSON.parse(localStorage.getItem("stb-quitados")||"{}");for(var k in q0)QUIT[k]=1}catch(e){}
+$("quitar").onclick=function(){if(!Q.actual){return}QUIT[Q.actual]=1;try{localStorage.setItem("stb-quitados",JSON.stringify(QUIT))}catch(e){}L("quitado en este móvil: "+Q.actual+" (díselo a Claude para quitarlo para siempre)");cargarTemas();siguiente()};
+setInterval(vivo,90000);
+fetch("playlist.json").then(function(r){return r.json()}).then(function(p){P=p;$("nombre").textContent=p.nombre;Q.voces=p.pista.filter(function(x){return x.tipo==="voz"});Q.cada=p.cada_temas||2;cargarTemas();vivo();L("lista cargada: "+Q.voces.length+" locuciones, "+Q.temas.length+" temas")}).catch(function(){L("no se pudo cargar playlist.json")});
 if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(function(){});
 </script></main></body></html>
