@@ -1,5 +1,5 @@
 {
- "rev": 6,
+ "rev": 7,
  "quitar": [],
  "anadir": [
   {
@@ -441,6 +441,256 @@
    "id": "po_9QotfkNY",
    "titulo": "Vicente Garcia - Te Soñé (Lyric Video)",
    "genero": "bachata"
+  },
+  {
+   "id": "LTE9ktAcSQg",
+   "titulo": "Grupo Frontera x Ke Personajes - OJITOS ROJOS (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "3inw26U-os4",
+   "titulo": "Grupo Frontera x Bad Bunny - UN X100TO (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "_G4MvUaaaLw",
+   "titulo": "Grupo Frontera ft. Maluma - POR QUÉ SERÁ (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "w-kSRbJSiD8",
+   "titulo": "Grupo Frontera - Amor Propio (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "nNUiVCKu_9Y",
+   "titulo": "Grupo Frontera, Fuerza Regida - COQUETA (Letra Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "Vr1M_l-1wjc",
+   "titulo": "Grupo Frontera x Grupo Firme - EL AMOR DE SU VIDA (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "VtKcDwz6hiM",
+   "titulo": "Grupo Frontera - NO SE VA (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "gG3516BF5_w",
+   "titulo": "Carin Leon x Grupo Frontera - QUE VUELVAS (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "Oie--p6YqJo",
+   "titulo": "Fuerza Regida x Grupo Frontera - Bebe Dame",
+   "genero": "cumbia"
+  },
+  {
+   "id": "5uBa5rrUifM",
+   "titulo": "Arcángel, Grupo Frontera - ALV (Video Oficial) | Sentimiento, Elegancia y Más Maldad",
+   "genero": "cumbia"
+  },
+  {
+   "id": "mG_RN0oB4oE",
+   "titulo": "Peso Pluma, Grupo Frontera - TULUM (Video Oficial)",
+   "genero": "otro"
+  },
+  {
+   "id": "Dcow-Jp3Ak4",
+   "titulo": "Ke Personajes Ft  Onda Sabanera | Pobre Corazón",
+   "genero": "cumbia"
+  },
+  {
+   "id": "kSn9xf6mVWQ",
+   "titulo": "Valentino Merlo X The la planta - Hoy (video oficial )",
+   "genero": "cumbia"
+  },
+  {
+   "id": "d2HmiKVoTNA",
+   "titulo": "Ke Personajes, FMK, Big One - Un Finde | CROSSOVER #2",
+   "genero": "cumbia"
+  },
+  {
+   "id": "DI71FIdguUs",
+   "titulo": "Tiago PZK, Ke Personajes - Piel (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "TiM_TFpT_DE",
+   "titulo": "La Bachata - MTZ Manuel Turizo | Video Oficial",
+   "genero": "bachata"
+  },
+  {
+   "id": "ex0A-W4XV4A",
+   "titulo": "Grupo Frontera, Manuel Turizo - DE LUNES A LUNES (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "TX-1dI8t6WM",
+   "titulo": "Emmanuel Cortes- Amor (Official Video)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "jJAo2cn1IC0",
+   "titulo": "Grupo Frontera x Grupo Marca Registrada - Di Que Si (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "IbE7peGTpmc",
+   "titulo": "Grupo Frontera - Hecha Pa' Mí (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "KzdVBI0OdtM",
+   "titulo": "Grupo Frontera, Manuel Turizo  - La Del Proceso (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "VYtJAuoZxcc",
+   "titulo": "Una Lady Como Tú - MTZ Manuel Turizo | Video Oficial",
+   "genero": "reguetón"
+  },
+  {
+   "id": "F3uzNaw-uhE",
+   "titulo": "Piso 21 - Me Llamas (feat. Maluma) [Remix] | Video Oficial",
+   "genero": "reguetón"
+  },
+  {
+   "id": "y7d9VLRO3vc",
+   "titulo": "Piso 21 & Manuel Turizo - Déjala Que Vuelva (Video Oficial)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "VqEbCxg2bNI",
+   "titulo": "Natti Natasha ❌ Ozuna - Criminal [Official Video]",
+   "genero": "reguetón"
+  },
+  {
+   "id": "DiItGE3eAyQ",
+   "titulo": "Daddy Yankee & Snow - Con Calma (Official Video)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "KWGrPNqz4uc",
+   "titulo": "Ozuna - Se Preparó (Video Oficial) | Odisea",
+   "genero": "reguetón"
+  },
+  {
+   "id": "fOT0BUpITw8",
+   "titulo": "BELLAKEO (Video Oficial) - Peso Pluma, Anitta",
+   "genero": "otro"
+  },
+  {
+   "id": "9jI-z9QN6g8",
+   "titulo": "Casper, Nio García, Darell, Nicky Jam, Bad Bunny, Ozuna - Te Bote Remix (Video Oficial)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "wfWkmURBNv8",
+   "titulo": "Ozuna x Romeo Santos - El Farsante (Remix) (Video Oficial)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "XgeRnpzxvjE",
+   "titulo": "Ke Personajes - Debió Ser Así (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "ibRnNj0t1-o",
+   "titulo": "Ke Personajes \"Adiós Amor & Oye Mujer\" Videoclip Oficial",
+   "genero": "cumbia"
+  },
+  {
+   "id": "3m9FJv8FKQo",
+   "titulo": "Ke Personajes - Piensa En Mi, Te Lo Pido Por Favor, Así Fue (En Vivo)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "XnYIQmA0jKc",
+   "titulo": "LA T Y LA M - No Se Va",
+   "genero": "cumbia"
+  },
+  {
+   "id": "N3RwJKg3_nU",
+   "titulo": "Se me va la voz / Normal - 18 Kilates",
+   "genero": "cumbia"
+  },
+  {
+   "id": "hXI8RQYC36Q",
+   "titulo": "21. El Perdón - Nicky Jam y Enrique Iglesias  (Official Music Video YTMAs)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "wlS6Ix7mA0w",
+   "titulo": "Anitta & J Balvin - Downtown [Official Music Video]",
+   "genero": "reguetón"
+  },
+  {
+   "id": "us3tczsrKQc",
+   "titulo": "Danza Kuduro (Official Extended Remix) Don Omar ft. Lucenzo, Daddy Yankee & Arcángel",
+   "genero": "reguetón"
+  },
+  {
+   "id": "OEzpylrXwII",
+   "titulo": "La Konga x Luck Ra x Ke Personajes - YA NO VUELVAS (Letra/Lyrics)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "3vK1oNNoEUU",
+   "titulo": "Ke Personajes, Americo | Entre el Odio y el Amor (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "th6QSI8PU7s",
+   "titulo": "La Delio Valdez y Ke Personajes - Adios Amor",
+   "genero": "cumbia"
+  },
+  {
+   "id": "xMpO7P25B30",
+   "titulo": "Ke Personajes - Como La Flor (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "UZhjpPHPPyQ",
+   "titulo": "Luck Ra, Khea - Hola Perdida (Letra)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "yl0sFXGVJ2Q",
+   "titulo": "La Konga, Luck Ra, Ke Personajes - YA NO VUELVAS",
+   "genero": "cumbia"
+  },
+  {
+   "id": "aDCcLQto5BM",
+   "titulo": "Danny Ocean - Me Rehúso (Official Audio)",
+   "genero": "otro"
+  },
+  {
+   "id": "OSUxrSe5GbI",
+   "titulo": "BAD BUNNY x DRAKE - MÍA (Official Video)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "0VR3dfZf9Yg",
+   "titulo": "Anuel AA, Daddy Yankee, Karol G, Ozuna & J Balvin - China (Video Oficial)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "acEOASYioGY",
+   "titulo": "BAD BUNNY -  CALLAÍTA (Official Video)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "TmKh7lAwnBI",
+   "titulo": "BAD BUNNY x JHAY CORTEZ - DÁKITI | EL ÚLTIMO TOUR DEL MUNDO (Official Video)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "BVdngsy95mY",
+   "titulo": "Myke Towers - Lala (Video Oficial)",
+   "genero": "reguetón"
   }
  ],
  "poner_ya": "",
