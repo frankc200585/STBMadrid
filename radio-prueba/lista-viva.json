@@ -1,7 +1,63 @@
 {
- "rev": 2,
+ "rev": 3,
  "quitar": [],
- "anadir": [],
+ "anadir": [
+  {
+   "id": "EJdbZIgaSHg",
+   "titulo": "Sin Sentimiento, Grupo Niche - Video",
+   "genero": "salsa"
+  },
+  {
+   "id": "dwq4WKIlt0k",
+   "titulo": "todo empezo   eddie santiago",
+   "genero": "salsa"
+  },
+  {
+   "id": "2mczR6Lp6Sc",
+   "titulo": "Willie Gonzalez Enamorado de ti",
+   "genero": "salsa"
+  },
+  {
+   "id": "sAI8X7jK1eI",
+   "titulo": "Cómo Podré Disimular, Grupo Niche - Video",
+   "genero": "salsa"
+  },
+  {
+   "id": "NshE75Ok898",
+   "titulo": "Tu Amigo o Tu Amante - La Sabrosura Orquesta (Video Oficial) | Discos Fuentes",
+   "genero": "salsa"
+  },
+  {
+   "id": "LaaSK5OpRT4",
+   "titulo": "#OmarAlfannoChallenge I AMORES COMO EL NUESTRO I 16 de Mayo 2020 I Lyric Video I #31dias31exitos",
+   "genero": "salsa"
+  },
+  {
+   "id": "Qy0GworETbU",
+   "titulo": "Willie Colon - El Gran Varon (Letra Oficial)",
+   "genero": "salsa"
+  },
+  {
+   "id": "2N-Jb1vh7Do",
+   "titulo": "Si SUPIERAS 🤩  - Maelo Ruiz [Video Oficial]",
+   "genero": "salsa"
+  },
+  {
+   "id": "8RhFosXuSxA",
+   "titulo": "Amiga, Maelo Ruiz, Video Letra - Salsa Power",
+   "genero": "salsa"
+  },
+  {
+   "id": "Ns1RrictMhE",
+   "titulo": "Si Volvieras A Mí, Maelo Ruiz, Video Letra - Salsa Power",
+   "genero": "salsa"
+  },
+  {
+   "id": "6xbICtgk-nU",
+   "titulo": "Rey Ruiz - No Me Acostumbro 💔 (Letra/Lyrics)",
+   "genero": "salsa"
+  }
+ ],
  "poner_ya": "",
  "poner_nonce": "",
  "saltar": 0,
