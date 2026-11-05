@@ -1,1 +1,20 @@
-{"rev":1,"quitar":[],"anadir":[],"poner_ya":"","poner_nonce":"","saltar":0}
+{
+ "rev": 2,
+ "quitar": [],
+ "anadir": [],
+ "poner_ya": "",
+ "poner_nonce": "",
+ "saltar": 0,
+ "saludos": [
+  {
+   "id": "1793883559",
+   "ts": 1793883559,
+   "para": "Franklin (prueba)",
+   "voces": [
+    "Carlos Alberto",
+    "Sandy"
+   ],
+   "archivo": "saludos/saludo-1793883559.mp3"
+  }
+ ]
+}
