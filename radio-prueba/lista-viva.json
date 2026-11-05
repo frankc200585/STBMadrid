@@ -1,5 +1,5 @@
 {
- "rev": 9,
+ "rev": 10,
  "quitar": [],
  "anadir": [
   {
@@ -785,7 +785,7 @@
    "tramo": "semana",
    "desde": "2026-10-31",
    "hasta": "2026-11-05",
-   "cuota": 0.1,
+   "cuota": 0.08,
    "ids": [
     "AyrmGAS05IQ",
     "JLwmBfrbYR4",
@@ -804,7 +804,7 @@
    "tramo": "dia",
    "desde": "2026-11-06",
    "hasta": "2026-11-06",
-   "cuota": 0.18,
+   "cuota": 0.08,
    "ids": [
     "AyrmGAS05IQ",
     "JLwmBfrbYR4",
@@ -823,7 +823,7 @@
    "tramo": "semana",
    "desde": "2026-10-31",
    "hasta": "2026-11-05",
-   "cuota": 0.1,
+   "cuota": 0.08,
    "ids": [
     "NFyae09vbrk",
     "A-E5e5IWxUQ",
@@ -839,7 +839,7 @@
    "tramo": "dia",
    "desde": "2026-11-06",
    "hasta": "2026-11-06",
-   "cuota": 0.18,
+   "cuota": 0.08,
    "ids": [
     "NFyae09vbrk",
     "A-E5e5IWxUQ",
