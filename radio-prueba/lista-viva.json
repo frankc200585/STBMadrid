@@ -1,5 +1,5 @@
 {
- "rev": 8,
+ "rev": 9,
  "quitar": [],
  "anadir": [
   {
@@ -736,6 +736,31 @@
    "id": "fzfcgk-US9c",
    "titulo": "Oscar Quesada y Los Titanes - Eres",
    "genero": "salsa"
+  },
+  {
+   "id": "A-E5e5IWxUQ",
+   "titulo": "Tony Vega - Ella Es",
+   "genero": "salsa"
+  },
+  {
+   "id": "0h7G8NYPKqs",
+   "titulo": "Tony Vega - Dile | Intimo 2 - Live",
+   "genero": "salsa"
+  },
+  {
+   "id": "OfgdBBQEAuQ",
+   "titulo": "Tony Vega - Aparentemente",
+   "genero": "salsa"
+  },
+  {
+   "id": "66UmuIl5oQ4",
+   "titulo": "Tony Vega - Fui Carnada",
+   "genero": "salsa"
+  },
+  {
+   "id": "NRTkyHnQFQQ",
+   "titulo": "Tony Vega - Haremos El Amor",
+   "genero": "salsa"
   }
  ],
  "poner_ya": "",
@@ -790,6 +815,38 @@
     "A72vnH46hIk",
     "h258iWuIiKY",
     "fzfcgk-US9c"
+   ]
+  },
+  {
+   "artista": "Tony Vega",
+   "evento": "2026-11-06",
+   "tramo": "semana",
+   "desde": "2026-10-31",
+   "hasta": "2026-11-05",
+   "cuota": 0.1,
+   "ids": [
+    "NFyae09vbrk",
+    "A-E5e5IWxUQ",
+    "0h7G8NYPKqs",
+    "OfgdBBQEAuQ",
+    "66UmuIl5oQ4",
+    "NRTkyHnQFQQ"
+   ]
+  },
+  {
+   "artista": "Tony Vega",
+   "evento": "2026-11-06",
+   "tramo": "dia",
+   "desde": "2026-11-06",
+   "hasta": "2026-11-06",
+   "cuota": 0.18,
+   "ids": [
+    "NFyae09vbrk",
+    "A-E5e5IWxUQ",
+    "0h7G8NYPKqs",
+    "OfgdBBQEAuQ",
+    "66UmuIl5oQ4",
+    "NRTkyHnQFQQ"
    ]
   }
  ]
