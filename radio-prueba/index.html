@@ -49,7 +49,7 @@ button.sec{background:transparent;color:var(--fg);border:1px solid var(--mut)}
 <script>
 "use strict";
 var $=function(i){return document.getElementById(i)},A=$("a"),H=$("h"),P=null,reg=[],t0=Date.now();
-var VIVO={rev:-1,saltar:0,poner:""},QUIT={},EXTRA=[],Q={temas:[],voces:[],ti:0,vi:0,cuenta:0,cada:2,tipo:"",empezado:false},silencio=false,YT=null,ytListo=false,ytPend=null;
+var VIVO={rev:-1,saltar:0,poner:"",inicio:Math.floor(Date.now()/1000),vistos:{}},QUIT={},EXTRA=[],Q={temas:[],voces:[],ti:0,vi:0,cuenta:0,cada:2,tipo:"",empezado:false},silencio=false,YT=null,ytListo=false,ytPend=null;
 function L(m){var s=((Date.now()-t0)/1000).toFixed(1)+"s "+m;reg.push(s);$("log").textContent=reg.slice(-50).join("\n");$("log").scrollTop=1e9}
 function medir(a){try{if(P&&P.medidor)navigator.sendBeacon(P.medidor+"?a="+encodeURIComponent(a))}catch(e){}}
 function idYT(s){s=(s||"").trim();var m=s.match(/(?:v=|youtu\.be\/|shorts\/|embed\/|live\/)([A-Za-z0-9_-]{11})/);if(m)return m[1];return /^[A-Za-z0-9_-]{11}$/.test(s)?s:null}
@@ -94,7 +94,7 @@ function siguiente(){ if(!Q.empezado)return; A.pause();
   if(tocaVoz){Q.cuenta=0;var it=Q.voces[Q.vi++%Q.voces.length];voz(it);return}
   if(Q.temas.length){Q.cuenta++;var id=elegir();ytPonerId(id)}
   else{$("tit").textContent="Sin música";$("sub").textContent="Pega enlaces de YouTube abajo"}}
-function empezar(){Q.empezado=true;mantener();medir("empezar");estado();siguiente()}
+function empezar(){Q.empezado=true;mantener();medir("empezar");estado();if(Q.saludoPend){var e=Q.saludoPend;Q.saludoPend=null;reproducirSaludo(e)}else siguiente()}
 $("play").onclick=function(){ if(!Q.empezado)return empezar(); sonido(!silencio) };
 $("sig").onclick=function(){if(!Q.empezado)return empezar();medir("siguiente");siguiente()};
 $("seguir").onclick=function(){aviso(false);try{YT.playVideo()}catch(e){}};
@@ -115,6 +115,7 @@ try{$("ytl").value=localStorage.getItem("stb-yt")||""}catch(e){}
 // Control en vivo (Franklin habla con Claude y Claude edita lista-viva.json en GitHub; la radio lo lee cada ~90 s, sin subir nada al hosting).
 var VIVO_URL="https://api.github.com/repos/frankc200585/STBMadrid/contents/radio-prueba/lista-viva.json?ref=main";
 function aplicarViva(v){
+  revisarSaludos(v);
   if(v.rev===VIVO.rev)return; var primera=VIVO.rev<0; VIVO.rev=v.rev;
   (v.quitar||[]).forEach(function(i){QUIT[i]=1});
   EXTRA=(v.anadir||[]).filter(function(e){return e&&e.id});
@@ -126,6 +127,17 @@ function aplicarViva(v){
     else if(Q.actual&&QUIT[Q.actual]&&Q.empezado){L("el tema que sonaba se ha quitado: paso al siguiente");siguiente()}
   }else{VIVO.saltar=v.saltar||0;VIVO.poner=v.poner_nonce||""}
 }
+
+function saludoUrl(e){return "https://raw.githubusercontent.com/frankc200585/STBMadrid/main/radio-prueba/"+e.archivo}
+function reproducirSaludo(e){
+  fetch(saludoUrl(e)).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){
+    var u=URL.createObjectURL(b);pararYT();A.src=u;A.muted=silencio;$("tit").textContent="💬 Saludo"+(e.para?" para "+e.para:"");$("sub").textContent=(e.voces||[]).join(" · ");ms("Saludo"+(e.para?" para "+e.para:""),"STB Radio");
+    A.play().then(function(){L("saludo en vivo: "+(e.para||"")+" ("+(e.voces||[]).join(", ")+")");medir("saludo")}).catch(function(x){L("BLOQUEADO saludo: "+x.name)})
+  }).catch(function(){L("no se pudo traer el saludo")})}
+function revisarSaludos(v){(v.saludos||[]).forEach(function(e){
+  if(VIVO.vistos[e.id])return;VIVO.vistos[e.id]=1;
+  if(e.ts<VIVO.inicio-600)return;
+  if(Q.empezado)reproducirSaludo(e);else Q.saludoPend=e})}
 function vivo(){fetch(VIVO_URL,{headers:{Accept:"application/vnd.github.raw"},cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(aplicarViva).catch(function(){})}
 try{var q0=JSON.parse(localStorage.getItem("stb-quitados")||"{}");for(var k in q0)QUIT[k]=1}catch(e){}
 $("quitar").onclick=function(){if(!Q.actual){return}QUIT[Q.actual]=1;try{localStorage.setItem("stb-quitados",JSON.stringify(QUIT))}catch(e){}L("quitado en este móvil: "+Q.actual+" (díselo a Claude para quitarlo para siempre)");cargarTemas();siguiente()};
