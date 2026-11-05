@@ -1,5 +1,5 @@
 {
- "rev": 4,
+ "rev": 5,
  "quitar": [],
  "anadir": [
   {
@@ -205,6 +205,186 @@
   {
    "id": "SqqlNk-kRBE",
    "titulo": "Como en los Viejos Tiempos, Barrio fino Orquesta (Eden Muños,Salsa)",
+   "genero": "salsa"
+  },
+  {
+   "id": "4k74WToWRM4",
+   "titulo": "don omar - dale don dale cover (salsa soul version)",
+   "genero": "salsa"
+  },
+  {
+   "id": "6MaFBMjyc50",
+   "titulo": "Con La Cara Pintada (Salsa All Stars) prod  by Jay Novva",
+   "genero": "salsa"
+  },
+  {
+   "id": "iuwmssvc7mc",
+   "titulo": "Sabroso que está - Salsa IA 33 - RPM",
+   "genero": "salsa"
+  },
+  {
+   "id": "0y_Y1hMmlT4",
+   "titulo": "Venganza Ácida - Salsa IA 33 RPM",
+   "genero": "salsa"
+  },
+  {
+   "id": "VPn92B85drI",
+   "titulo": "52 - EL AFILADOR - Una SALSA encontrandole sonido diferente",
+   "genero": "salsa"
+  },
+  {
+   "id": "ctj2yKp4-9M",
+   "titulo": "Tócalo ya 💿🎼salsa-rumba-orquesta #orquesta #salsa #baile #rumba #barrio #2025 ❤️",
+   "genero": "salsa"
+  },
+  {
+   "id": "1VqglnFHMPo",
+   "titulo": "Lost & Found Promos - La Esquina Del Son",
+   "genero": "salsa"
+  },
+  {
+   "id": "mt7htDkKpjE",
+   "titulo": "48 - CUERDAS DEL ALMA - SALSA en linea de SPANGLISH con estilo de sonido GUAGUANCO MODERNO",
+   "genero": "salsa"
+  },
+  {
+   "id": "gRIa256XaOI",
+   "titulo": "44 - La Puerta Del Dolor\"  - Esta version de esta salsa te va a gustar",
+   "genero": "salsa"
+  },
+  {
+   "id": "ElnxjrurFOg",
+   "titulo": "Juanito Sigue Suelto (Salsa All Stars) prod  by Jay Novva",
+   "genero": "salsa"
+  },
+  {
+   "id": "-FevNs_Yg1o",
+   "titulo": "ESCLAVO Y AMO - Javier Solis (Cover Salsa BouquerMusic)",
+   "genero": "salsa"
+  },
+  {
+   "id": "uxUUCKmF7R8",
+   "titulo": "Ay, mi PR",
+   "genero": "salsa"
+  },
+  {
+   "id": "LQ8MMX59AdI",
+   "titulo": "Pa' Qué Me Invitan   Salsa",
+   "genero": "salsa"
+  },
+  {
+   "id": "0_X1-jzM0aY",
+   "titulo": "Mucho tumbado - Salsa IA 33 RPM",
+   "genero": "salsa"
+  },
+  {
+   "id": "Oo9L_FlkJUY",
+   "titulo": "50 - GUAGUANCO PA' TI - SALSA bajo la linea de SPANGLISH que esta gustando",
+   "genero": "salsa"
+  },
+  {
+   "id": "ToVBU6UNEHQ",
+   "titulo": "Tengo la llave - Salsa Dura con Clase (Audio Oficial) - Salsa IA 33 RPM",
+   "genero": "salsa"
+  },
+  {
+   "id": "uMwms-eYNq4",
+   "titulo": "ERES [Salsa] ❤️",
+   "genero": "salsa"
+  },
+  {
+   "id": "OPgjDF4Qmeg",
+   "titulo": "Ahora Me Toca a Mí – (Salsa 2026) 💔🔥",
+   "genero": "salsa"
+  },
+  {
+   "id": "9XiIhvKUc6Q",
+   "titulo": "Si Te Vas 💔 | Salsa Romántica 2026 🔥",
+   "genero": "salsa"
+  },
+  {
+   "id": "zxW5wr805S4",
+   "titulo": "DJ Ricky Campanelli Buscando la verdad",
+   "genero": "salsa"
+  },
+  {
+   "id": "KtZW_3JNAmY",
+   "titulo": "SALSEROS Y SONEROS DEL CALLAO - Fuerza del Barrio | Salsa Dura Chalaca #salsadura #salsadancing",
+   "genero": "salsa"
+  },
+  {
+   "id": "0oyo7gyDBPM",
+   "titulo": "Bolero en la Madrugada - Noches de La Habana",
+   "genero": "bolero"
+  },
+  {
+   "id": "h8r5rbUmBzs",
+   "titulo": "X Remix - Nicky Jam x J Balvin x Ozuna x Maluma",
+   "genero": "reguetón"
+  },
+  {
+   "id": "_Zila5rLu74",
+   "titulo": "Don Omar - Pobre Diabla (Original Version)",
+   "genero": "reguetón"
+  },
+  {
+   "id": "zODmu06pqvg",
+   "titulo": "Don Omar | Dile (Video Oficial )",
+   "genero": "reguetón"
+  },
+  {
+   "id": "2gyHRp_qxEU",
+   "titulo": "Leoni Torres - Idilio (Video Oficial) [Remaster | HD]",
+   "genero": "salsa"
+  },
+  {
+   "id": "KEXq9WLq8ho",
+   "titulo": "TU SONRISA - Mixael cabrera (Official Video)",
+   "genero": "otro"
+  },
+  {
+   "id": "JR9UC9l2WW4",
+   "titulo": "Don Omar | Pobre Diabla (Video Oficial) ❌",
+   "genero": "reguetón"
+  },
+  {
+   "id": "_yIRcn2EDVQ",
+   "titulo": "Yo Voy a Ti - Zion y Lennox Ft. Daddy Yankee (Motivando la Yal) [Audio]",
+   "genero": "reguetón"
+  },
+  {
+   "id": "G_FuyWxTapo",
+   "titulo": "Jean & Alex, Pinto Picasso - Chacha (Official Video)",
+   "genero": "otro"
+  },
+  {
+   "id": "Wl3dVES1ZNk",
+   "titulo": "OXÍGENO - Dj Husky x Dimelo Cupido x Shama",
+   "genero": "otro"
+  },
+  {
+   "id": "IKo2OHBemEI",
+   "titulo": "INSOMNIO - DJ HUSKY & SHAMA",
+   "genero": "otro"
+  },
+  {
+   "id": "4q7qRSxtKM0",
+   "titulo": "Jensen - Lejanía (Video Oficial)",
+   "genero": "otro"
+  },
+  {
+   "id": "JtAAgC1UCqI",
+   "titulo": "BARCELONA - Dj Husky X Charles Luis X Dimelo Cupido",
+   "genero": "otro"
+  },
+  {
+   "id": "GsdZj6YLhJ0",
+   "titulo": "MELAO DE CAÑA - OSCAR DE LEON",
+   "genero": "salsa"
+  },
+  {
+   "id": "pRFd28x33eY",
+   "titulo": "DJ Ricky Campanelli Feat Andy Rubal & Alexis Charrier - Nos Curamos Con la Rumba Official Video",
    "genero": "salsa"
   }
  ],
