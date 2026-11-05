@@ -1,5 +1,5 @@
 {
- "rev": 5,
+ "rev": 6,
  "quitar": [],
  "anadir": [
   {
@@ -386,6 +386,61 @@
    "id": "pRFd28x33eY",
    "titulo": "DJ Ricky Campanelli Feat Andy Rubal & Alexis Charrier - Nos Curamos Con la Rumba Official Video",
    "genero": "salsa"
+  },
+  {
+   "id": "2LiZyAIVmbs",
+   "titulo": "Juan Luis Guerra 4.40 - Bachata Rosa (Remastered)",
+   "genero": "bachata"
+  },
+  {
+   "id": "_4NBD3SqBwg",
+   "titulo": "Juan Luis Guerra - Bachata En Fukuoka",
+   "genero": "bachata"
+  },
+  {
+   "id": "wNrucsuePOg",
+   "titulo": "Juan Luis Guerra 4.40 - DJ Bachata (Video Oficial)",
+   "genero": "bachata"
+  },
+  {
+   "id": "ncByymoHQRI",
+   "titulo": "Juan Luis Guerra 4.40 - Tus Besos",
+   "genero": "bachata"
+  },
+  {
+   "id": "OVQcekD_NCs",
+   "titulo": "Juan Luis Guerra 4.40 - Medley de Bachatas (Live)",
+   "genero": "bachata"
+  },
+  {
+   "id": "PWGwF_B0bxk",
+   "titulo": "Juan Luis Guerra 4.40 - Burbujas De Amor (Video Oficial)",
+   "genero": "bachata"
+  },
+  {
+   "id": "zHhza3EgHe8",
+   "titulo": "Juan Luis Guerra - Frío, Frío (feat. Romeo Santos) [Live]",
+   "genero": "bachata"
+  },
+  {
+   "id": "4ecd3EN-ha0",
+   "titulo": "Te Regalo Una Rosa - Juan Luis Guerra",
+   "genero": "bachata"
+  },
+  {
+   "id": "_AHNTdSfa40",
+   "titulo": "Vicente García - Bachata En Kingston (Video Oficial)",
+   "genero": "bachata"
+  },
+  {
+   "id": "ea4ovC_B6ow",
+   "titulo": "Vicente García - Carmesí (Video Oficial)",
+   "genero": "bachata"
+  },
+  {
+   "id": "po_9QotfkNY",
+   "titulo": "Vicente Garcia - Te Soñé (Lyric Video)",
+   "genero": "bachata"
   }
  ],
  "poner_ya": "",
