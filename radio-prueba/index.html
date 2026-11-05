@@ -128,17 +128,23 @@ function aplicarViva(v){
   }else{VIVO.saltar=v.saltar||0;VIVO.poner=v.poner_nonce||""}
 }
 
-function saludoUrl(e){return "https://raw.githubusercontent.com/frankc200585/STBMadrid/main/radio-prueba/"+e.archivo}
+function saludoFuentes(e){return ["https://raw.githubusercontent.com/frankc200585/STBMadrid/main/radio-prueba/"+e.archivo,RV+encodeURIComponent(e.archivo).replace(/%2F/g,"/")]}
+function traerSaludo(f,k){if(k>=f.length)return Promise.reject();return traer(f[k],{},10000).then(function(r){return r.blob()}).catch(function(){return traerSaludo(f,k+1)})}
 function reproducirSaludo(e){
-  fetch(saludoUrl(e)).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){
+  traerSaludo(saludoFuentes(e),0).then(function(b){
     var u=URL.createObjectURL(b);pararYT();A.src=u;A.muted=silencio;$("tit").textContent="💬 Saludo"+(e.para?" para "+e.para:"");$("sub").textContent=(e.voces||[]).join(" · ");ms("Saludo"+(e.para?" para "+e.para:""),"STB Radio");
     A.play().then(function(){L("saludo en vivo: "+(e.para||"")+" ("+(e.voces||[]).join(", ")+")");medir("saludo")}).catch(function(x){L("BLOQUEADO saludo: "+x.name)})
-  }).catch(function(){L("no se pudo traer el saludo")})}
+  }).catch(function(){L("no se pudo traer el saludo (ni GitHub ni stbsocial)")})}
 function revisarSaludos(v){(v.saludos||[]).forEach(function(e){
   if(VIVO.vistos[e.id])return;VIVO.vistos[e.id]=1;
   if(e.ts<VIVO.inicio-600)return;
   if(Q.empezado)reproducirSaludo(e);else Q.saludoPend=e})}
-function vivo(){fetch(VIVO_URL,{headers:{Accept:"application/vnd.github.raw"},cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(aplicarViva).catch(function(){})}
+function traer(u,opt,ms){var c=window.AbortController?new AbortController():null,t=setTimeout(function(){c&&c.abort()},ms||8000);opt=opt||{};if(c)opt.signal=c.signal;return fetch(u,opt).then(function(r){clearTimeout(t);if(!r.ok)throw 0;return r})}
+// Plan B: dos canales a la vez (GitHub y el relevo de stbsocial.com publicado por el Ubuntu de casa); vale el de revisión más alta.
+var RV="https://stbsocial.com/rv.php?f=";
+function vivo(){var a=traer(VIVO_URL,{headers:{Accept:"application/vnd.github.raw"},cache:"no-store"}).then(function(r){return r.json()}).catch(function(){return null}),
+  b=traer(RV+"lista-viva.json",{cache:"no-store"}).then(function(r){return r.json()}).catch(function(){return null});
+  Promise.all([a,b]).then(function(x){var v=[x[0],x[1]].filter(Boolean).sort(function(p,q){return q.rev-p.rev})[0];if(v){aplicarViva(v);VIVO.fallos=0}else{VIVO.fallos=(VIVO.fallos||0)+1;if(VIVO.fallos===1||VIVO.fallos%10===0)L("lista en vivo: sin conexión con GitHub ni con stbsocial (sigo con la lista que tengo)")}})}
 try{var q0=JSON.parse(localStorage.getItem("stb-quitados")||"{}");for(var k in q0)QUIT[k]=1}catch(e){}
 $("quitar").onclick=function(){if(!Q.actual){return}QUIT[Q.actual]=1;try{localStorage.setItem("stb-quitados",JSON.stringify(QUIT))}catch(e){}L("quitado en este móvil: "+Q.actual+" (díselo a Claude para quitarlo para siempre)");cargarTemas();siguiente()};
 setInterval(vivo,90000);
