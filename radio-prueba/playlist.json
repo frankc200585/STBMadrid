@@ -225,5 +225,61 @@
     "salsa": 0.4,
     "bachata": 0.3,
     "resto": 0.3
+  },
+  "cortas": [
+    {
+      "titulo": "Estás escuchando S T B Radio. ¡Que no pare la fiesta!",
+      "archivo": "audio/corta-1.mp3",
+      "seg": 3.5
+    },
+    {
+      "titulo": "S T B Radio, salsa y bachata. Así se goza, mi gente.",
+      "archivo": "audio/corta-2.mp3",
+      "seg": 4.4
+    },
+    {
+      "titulo": "Ay, qué sabroso. Sigue con nosotros en S T B Radio.",
+      "archivo": "audio/corta-3.mp3",
+      "seg": 3.6
+    },
+    {
+      "titulo": "Recuerda: puedes pedirnos tu canción. Aquí la música la ponen ustedes.",
+      "archivo": "audio/corta-4.mp3",
+      "seg": 4.4
+    },
+    {
+      "titulo": "¿Ya estás bailando? Pues no pares, que esto sigue.",
+      "archivo": "audio/corta-5.mp3",
+      "seg": 3.7
+    },
+    {
+      "titulo": "Un saludo a todos los que nos escuchan desde Madrid. ¡Un abrazo!",
+      "archivo": "audio/corta-6.mp3",
+      "seg": 3.6
+    },
+    {
+      "titulo": "S T B Radio. La radio de la salsa y la bachata.",
+      "archivo": "audio/corta-7.mp3",
+      "seg": 3.4
+    },
+    {
+      "titulo": "Dale volumen y a disfrutar. Esto es S T B Radio.",
+      "archivo": "audio/corta-8.mp3",
+      "seg": 3.4
+    },
+    {
+      "titulo": "Oye, ¿tú estás escuchando esto? Claro que sí, mi hermana. Esto es S T B Radio. Pues no cambies de emisora, que lo mejor viene ahora.",
+      "archivo": "audio/corta-9.mp3",
+      "seg": 7.9
+    },
+    {
+      "titulo": "Si tienes una canción en la cabeza, dínosla y la buscamos. Eso, que aquí te complacemos. ¡Y sigue bailando!",
+      "archivo": "audio/corta-10.mp3",
+      "seg": 5.6
+    }
+  ],
+  "encima": {
+    "prob": 0.35,
+    "volumen_bajo": 0.2
   }
 }

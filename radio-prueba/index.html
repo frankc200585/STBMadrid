@@ -69,7 +69,7 @@ function ytPonerId(id,titulo){
   function ir(){ if(!YT){YT=new window.YT.Player("ytp",{videoId:id,playerVars:{playsinline:1,rel:0,origin:location.origin},events:{
       onReady:function(e){ if(silencio)e.target.mute(); e.target.playVideo() },
       onStateChange:function(e){var s=e.data;
-        if(s===1){aviso(false);var d=e.target.getVideoData();$("tit").textContent="♪ "+(d.title||"YouTube");$("sub").textContent=(d.author||"")+" · "+Q.actual;ms(d.title||"YouTube",d.author);L("suena YT: "+(d.title||id));medir("tema")}
+        if(s===1){aviso(false);if(Q.planId!==Q.actual){Q.planId=Q.actual;try{planear(e.target.getDuration())}catch(x){}}var d=e.target.getVideoData();$("tit").textContent="♪ "+(d.title||"YouTube");$("sub").textContent=(d.author||"")+" · "+Q.actual;ms(d.title||"YouTube",d.author);L("suena YT: "+(d.title||id));medir("tema")}
         if(s===0){L("fin YT");siguiente()}},
       onError:function(e){L("ERROR YouTube "+e.data+" (vídeo no incrustable o borrado)");medir("error");setTimeout(siguiente,600)}}})}
     else{YT.loadVideoById(id);}
@@ -89,7 +89,22 @@ function elegir0(){var R=(P&&P.reparto)||{salsa:.4,bachata:.3,resto:.3},hay=[],t
   if(!hay.length)return Q.todos[0];
   var mejor=hay[0],dm=-9;hay.forEach(function(g){var d=R[g]/tot-(totalSonado?sonado[g]/totalSonado:0);if(d>dm){dm=d;mejor=g}});
   var b=bolsa(mejor),id=b.shift();sonado[mejor]++;totalSonado++;L("tema "+totalSonado+": "+mejor+" (salsa "+sonado.salsa+" · bachata "+sonado.bachata+" · resto "+sonado.resto+")");return id}
-function siguiente(){ if(!Q.empezado)return; A.pause();
+
+// Locutor por encima de la canción (ducking): de vez en cuando, hasta 10 s, la música baja, habla un locutor y la música vuelve a subir.
+// iPhone/iPad: el reproductor de YouTube ignora el volumen → allí NO se hace (la música seguiría fuerte y taparía la voz).
+var ES_IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+var DK={punto:-1,hecha:false,ci:0};
+function rampa(de,a,ms,fin){var n=10,k=0,t=setInterval(function(){k++;try{YT.setVolume(Math.round(de+(a-de)*k/n))}catch(e){}if(k>=n){clearInterval(t);fin&&fin()}},ms/n)}
+function planear(dur){DK.hecha=false;DK.punto=-1;var pr=(P&&P.encima&&P.encima.prob)||.35;
+  if(ES_IOS||!Q.cortas||!Q.cortas.length||!dur||dur<60||Math.random()>pr)return;
+  DK.punto=20+Math.random()*(dur-45)}   // entre el seg. 20 y 25 s antes del final
+function encima(){var c=Q.cortas[DK.ci++%Q.cortas.length],alto=100,bajo=Math.round(((P&&P.encima&&P.encima.volumen_bajo)||.2)*100);
+  Q.encima=true;DK.hecha=true;L("locutor encima de la canción: "+c.titulo.slice(0,40)+" ("+c.seg+" s)");
+  rampa(alto,bajo,700,function(){A.src=c.archivo;A.muted=silencio;A.play().then(function(){medir("encima")}).catch(function(e){L("BLOQUEADO encima: "+e.name);restaurar()})})}
+function restaurar(){Q.encima=false;rampa(((P&&P.encima&&P.encima.volumen_bajo)||.2)*100,100,900)}
+setInterval(function(){try{if(!Q.empezado||Q.encima||DK.hecha||DK.punto<0||!YT||YT.getPlayerState()!==1)return;
+  if(YT.getCurrentTime()>=DK.punto)encima()}catch(e){}},1000);
+function siguiente(){ if(!Q.empezado)return; Q.encima=false;DK.hecha=true;try{if(YT&&YT.setVolume)YT.setVolume(100)}catch(e){}A.pause();
   var tocaVoz=Q.voces.length&&(Q.cuenta>=Q.cada||!Q.temas.length);
   if(tocaVoz){Q.cuenta=0;var it=Q.voces[Q.vi++%Q.voces.length];voz(it);return}
   if(Q.temas.length){Q.cuenta++;var id=elegir();ytPonerId(id)}
@@ -98,8 +113,8 @@ function empezar(){Q.empezado=true;mantener();medir("empezar");estado();if(Q.sal
 $("play").onclick=function(){ if(!Q.empezado)return empezar(); sonido(!silencio) };
 $("sig").onclick=function(){if(!Q.empezado)return empezar();medir("siguiente");siguiente()};
 $("seguir").onclick=function(){aviso(false);try{YT.playVideo()}catch(e){}};
-A.onended=function(){L("fin de voz");siguiente()};
-A.onerror=function(){L("ERROR de audio de voz");medir("error");setTimeout(siguiente,500)};
+A.onended=function(){if(Q.encima){L("fin del locutor encima: la música vuelve");restaurar();return}L("fin de voz");siguiente()};
+A.onerror=function(){if(Q.encima){restaurar();return}L("ERROR de audio de voz");medir("error");setTimeout(siguiente,500)};
 $("gl").onclick=function(){try{localStorage.setItem("stb-yt",$("ytl").value)}catch(e){}cargarTemas();L("lista guardada")};
 document.addEventListener("visibilitychange",function(){L("pantalla: "+document.visibilityState+" | sonido:"+(silencio?"NO":"sí")+" | sesión:"+(H.paused?"PARADA":"viva"));if(document.visibilityState==="visible"&&Q.empezado&&H.paused)mantener()});
 if("mediaSession" in navigator){
@@ -148,6 +163,6 @@ function vivo(){var a=traer(VIVO_URL,{headers:{Accept:"application/vnd.github.ra
 try{var q0=JSON.parse(localStorage.getItem("stb-quitados")||"{}");for(var k in q0)QUIT[k]=1}catch(e){}
 $("quitar").onclick=function(){if(!Q.actual){return}QUIT[Q.actual]=1;try{localStorage.setItem("stb-quitados",JSON.stringify(QUIT))}catch(e){}L("quitado en este móvil: "+Q.actual+" (díselo a Claude para quitarlo para siempre)");cargarTemas();siguiente()};
 setInterval(vivo,90000);
-fetch("playlist.json").then(function(r){return r.json()}).then(function(p){P=p;$("nombre").textContent=p.nombre;Q.voces=p.pista.filter(function(x){return x.tipo==="voz"});Q.cada=p.cada_temas||2;cargarTemas();vivo();L("lista cargada: "+Q.voces.length+" locuciones, "+Q.temas.length+" temas")}).catch(function(){L("no se pudo cargar playlist.json")});
+fetch("playlist.json").then(function(r){return r.json()}).then(function(p){P=p;$("nombre").textContent=p.nombre;Q.voces=p.pista.filter(function(x){return x.tipo==="voz"});Q.cortas=(p.cortas||[]).filter(function(x){return x.seg<=10});Q.cada=p.cada_temas||2;cargarTemas();vivo();L("lista cargada: "+Q.voces.length+" locuciones, "+Q.temas.length+" temas")}).catch(function(){L("no se pudo cargar playlist.json")});
 if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(function(){});
 </script></main></body></html>
