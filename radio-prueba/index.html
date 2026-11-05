@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f1115"><meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="STB Radio">
+<title>STB Radio</title>
+<style>
+:root{--bg:#0f1115;--fg:#f2f2f2;--mut:#9aa0aa;--ac:#ff5a36;--card:#1a1d24}
+@media(prefers-color-scheme:light){:root{--bg:#f6f6f4;--fg:#15171c;--mut:#5b6270;--card:#fff}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 system-ui,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:520px;margin:0 auto;padding:16px}h1{font-size:1.25rem;margin:.2em 0}
+.card{background:var(--card);border-radius:16px;padding:16px;margin:12px 0}
+#tit{font-size:1.15rem;font-weight:700}#sub{color:var(--mut)}
+.row{display:flex;gap:12px;margin-top:14px;align-items:center}
+button{background:var(--ac);color:#fff;border:0;border-radius:14px;padding:16px 22px;font-size:1.05rem;cursor:pointer;min-height:52px}
+button.sec{background:transparent;color:var(--fg);border:1px solid var(--mut)}
+#play{flex:1;font-size:1.2rem}
+#yt{margin-top:12px;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#000;display:none}#yt.on{display:block}#yt iframe{width:100%;height:100%}textarea{width:100%;min-height:90px;background:var(--bg);color:var(--fg);border:1px solid var(--mut);border-radius:12px;padding:10px;font:14px system-ui}#aviso{color:var(--ac);margin-top:8px;display:none}#aviso.on{display:block}.mut{color:var(--mut)}
+#log{font:12px/1.5 ui-monospace,monospace;color:var(--mut);max-height:220px;overflow:auto;white-space:pre-wrap}
+.bar{height:6px;background:var(--bg);border-radius:3px;margin-top:12px;overflow:hidden}#bar{height:100%;width:0;background:var(--ac)}
+</style></head><body><main>
+<h1 id="nombre">STB Radio</h1>
+<div class="card">
+  <div id="tit">Listo</div><div id="sub">Pulsa ▶ para empezar</div>
+  <div class="bar"><div id="bar"></div></div>
+  <div id="yt"><div id="ytp"></div></div>
+  <div id="aviso"><button id="seguir">▶ Toca para seguir con la música</button></div>
+  <div class="row"><button id="play">▶ Empezar</button><button class="sec" id="sig">⏭</button></div>
+  <p class="mut" style="margin:.8em 0 0">Con la pantalla bloqueada, <b>pausa = silenciar</b> y <b>play = volver el sonido</b>: la radio sigue «en directo» por debajo.</p>
+</div>
+<div class="card">
+  <b>Tu música de YouTube</b>
+  <p class="mut" style="margin:.4em 0">Reparto 40 % salsa · 30 % bachata · 30 % otros ritmos, en orden aleatorio: salsa y bachata de las listas de Franklin + lo que pegues aquí (enlaces de YouTube, uno por línea; se guardan en este móvil).</p>
+  <textarea id="ytl" placeholder="https://www.youtube.com/watch?v=...&#10;https://youtu.be/..."></textarea>
+  <div class="row"><button class="sec" id="gl">Guardar lista</button><span id="nl" class="mut"></span></div>
+</div>
+<div class="card">
+  <b>Prueba</b>
+  <p class="mut" style="margin:.4em 0">Pulsa Empezar, bloquea la pantalla y mira si suena; usa pausa/play de la pantalla de bloqueo. Luego «Copiar registro» y mándamelo.</p>
+  <div class="row"><button class="sec" id="cp">Copiar registro</button></div>
+  <div id="log"></div>
+</div>
+<audio id="a" preload="auto" playsinline></audio>
+<audio id="h" src="audio/silencio.mp3" loop preload="auto" playsinline></audio>
+<script>
+"use strict";
+var $=function(i){return document.getElementById(i)},A=$("a"),H=$("h"),P=null,reg=[],t0=Date.now();
+var Q={temas:[],voces:[],ti:0,vi:0,cuenta:0,cada:2,tipo:"",empezado:false},silencio=false,YT=null,ytListo=false,ytPend=null;
+function L(m){var s=((Date.now()-t0)/1000).toFixed(1)+"s "+m;reg.push(s);$("log").textContent=reg.slice(-50).join("\n");$("log").scrollTop=1e9}
+function medir(a){try{if(P&&P.medidor)navigator.sendBeacon(P.medidor+"?a="+encodeURIComponent(a))}catch(e){}}
+function idYT(s){s=(s||"").trim();var m=s.match(/(?:v=|youtu\.be\/|shorts\/|embed\/|live\/)([A-Za-z0-9_-]{11})/);if(m)return m[1];return /^[A-Za-z0-9_-]{11}$/.test(s)?s:null}
+function guardada(){try{return (localStorage.getItem("stb-yt")||"").split("\n").filter(Boolean)}catch(e){return []}}
+function mezclar(a){a=a.slice();for(var k=a.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),t=a[k];a[k]=a[j];a[j]=t}return a}
+function cargarTemas(){var l=guardada().map(idYT).filter(Boolean);if(P)l=l.concat((P.youtube||[]).map(idYT).filter(Boolean));l=l.filter(function(x,k){return l.indexOf(x)===k});Q.todos=l;Q.temas=l;Q.ti=0;G={};$("nl").textContent=l.length+" temas"}
+function ms(t,a){if(!("mediaSession" in navigator))return;try{navigator.mediaSession.metadata=new MediaMetadata({title:t,artist:a||"STB Radio",album:"STB Radio",artwork:[{src:"icon-512.png",sizes:"512x512",type:"image/png"},{src:"icon-180.png",sizes:"180x180",type:"image/png"}]});navigator.mediaSession.playbackState=silencio?"paused":"playing"}catch(e){}}
+function estado(){ $("play").textContent=!Q.empezado?"▶ Empezar":(silencio?"🔊 Volver el sonido":"🔇 Silenciar");
+  if("mediaSession" in navigator)try{navigator.mediaSession.playbackState=silencio?"paused":"playing"}catch(e){} }
+function sonido(s){silencio=s;A.muted=s;try{if(YT&&YT.mute){s?YT.mute():YT.unMute()}}catch(e){}estado();L(s?"SILENCIO":"SONIDO")}
+function mantener(){H.play().catch(function(e){L("sesión: "+e.name)})}   // audio mudo en bucle: sostiene la sesión (pantalla de bloqueo)
+function aviso(on){$("aviso").classList.toggle("on",!!on)}
+function ytCargar(cb){ if(window.YT&&YT_API)return cb(); var s=document.createElement("script");s.src="https://www.youtube.com/iframe_api";s.onerror=function(){L("YouTube no carga");$("tit").textContent="YouTube no se puede cargar aquí";$("sub").textContent="Esta página lo bloquea; hace falta alojar la radio en una web propia";$("yt").classList.remove("on")};document.head.appendChild(s);window.onYouTubeIframeAPIReady=function(){cb()} }
+var YT_API=true;
+function ytPonerId(id,titulo){
+  $("yt").classList.add("on");
+  function ir(){ if(!YT){YT=new window.YT.Player("ytp",{videoId:id,playerVars:{playsinline:1,rel:0,origin:location.origin},events:{
+      onReady:function(e){ if(silencio)e.target.mute(); e.target.playVideo() },
+      onStateChange:function(e){var s=e.data;
+        if(s===1){aviso(false);var d=e.target.getVideoData();$("tit").textContent="♪ "+(d.title||"YouTube");$("sub").textContent=d.author||"";ms(d.title||"YouTube",d.author);L("suena YT: "+(d.title||id));medir("tema")}
+        if(s===0){L("fin YT");siguiente()}},
+      onError:function(e){L("ERROR YouTube "+e.data+" (vídeo no incrustable o borrado)");medir("error");setTimeout(siguiente,600)}}})}
+    else{YT.loadVideoById(id);}
+    clearTimeout(Q.espera);Q.espera=setTimeout(function(){ try{if(YT.getPlayerState()!==1){aviso(true);L("YT no arranca solo (iPhone exige un toque)")}}catch(e){} },3500)}
+  if(window.YT&&window.YT.Player)ir();else ytCargar(ir)}
+function pararYT(){try{if(YT&&YT.pauseVideo)YT.pauseVideo()}catch(e){}$("yt").classList.remove("on");aviso(false)}
+function voz(it){pararYT();A.src=it.archivo;A.muted=silencio;$("tit").textContent="🎙 "+it.titulo;$("sub").textContent="Locutores";ms(it.titulo,"Locutores");A.play().then(function(){L("suena voz: "+it.titulo);medir("voz")}).catch(function(e){L("BLOQUEADO voz: "+e.name)})}
+
+// Reparto objetivo: 40 % salsa · 30 % bachata · 30 % resto de ritmos latinos. Se elige el grupo que más lejos va de su cuota; dentro, al azar sin repetir hasta agotar.
+var G={},sonado={salsa:0,bachata:0,resto:0},totalSonado=0;
+function grupo(id){var g=(P&&P.generos&&P.generos[id])||"salsa";return g==="salsa"?"salsa":g==="bachata"?"bachata":"resto"}
+function bolsa(g){if(!G[g]||!G[g].length){G[g]=mezclar(Q.todos.filter(function(x){return grupo(x)===g}))}return G[g]}
+function elegir(){var R=(P&&P.reparto)||{salsa:.4,bachata:.3,resto:.3},hay=[],tot=0;
+  ["salsa","bachata","resto"].forEach(function(g){if(Q.todos.some(function(x){return grupo(x)===g})){hay.push(g);tot+=R[g]}});
+  if(!hay.length)return Q.todos[0];
+  var mejor=hay[0],dm=-9;hay.forEach(function(g){var d=R[g]/tot-(totalSonado?sonado[g]/totalSonado:0);if(d>dm){dm=d;mejor=g}});
+  var b=bolsa(mejor),id=b.shift();sonado[mejor]++;totalSonado++;L("tema "+totalSonado+": "+mejor+" (salsa "+sonado.salsa+" · bachata "+sonado.bachata+" · resto "+sonado.resto+")");return id}
+function siguiente(){ if(!Q.empezado)return; A.pause();
+  var tocaVoz=Q.voces.length&&(Q.cuenta>=Q.cada||!Q.temas.length);
+  if(tocaVoz){Q.cuenta=0;var it=Q.voces[Q.vi++%Q.voces.length];voz(it);return}
+  if(Q.temas.length){Q.cuenta++;var id=elegir();ytPonerId(id)}
+  else{$("tit").textContent="Sin música";$("sub").textContent="Pega enlaces de YouTube abajo"}}
+function empezar(){Q.empezado=true;mantener();medir("empezar");estado();siguiente()}
+$("play").onclick=function(){ if(!Q.empezado)return empezar(); sonido(!silencio) };
+$("sig").onclick=function(){if(!Q.empezado)return empezar();medir("siguiente");siguiente()};
+$("seguir").onclick=function(){aviso(false);try{YT.playVideo()}catch(e){}};
+A.onended=function(){L("fin de voz");siguiente()};
+A.onerror=function(){L("ERROR de audio de voz");medir("error");setTimeout(siguiente,500)};
+$("gl").onclick=function(){try{localStorage.setItem("stb-yt",$("ytl").value)}catch(e){}cargarTemas();L("lista guardada")};
+document.addEventListener("visibilitychange",function(){L("pantalla: "+document.visibilityState+" | sonido:"+(silencio?"NO":"sí")+" | sesión:"+(H.paused?"PARADA":"viva"));if(document.visibilityState==="visible"&&Q.empezado&&H.paused)mantener()});
+if("mediaSession" in navigator){
+  var act=function(k,f){try{navigator.mediaSession.setActionHandler(k,f)}catch(e){}};
+  act("pause",function(){L("bloqueo: pausa → silenciar");sonido(true)});
+  act("play",function(){L("bloqueo: play → sonido");if(!Q.empezado)empezar();else{sonido(false);if(H.paused)mantener()}});
+  act("nexttrack",function(){siguiente()});
+  act("stop",function(){sonido(true)});
+}
+$("cp").onclick=function(){var t=reg.join("\n")+"\n"+navigator.userAgent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){L("copiado")}).catch(function(){window.prompt("Copia esto:",t)})};
+try{$("ytl").value=localStorage.getItem("stb-yt")||""}catch(e){}
+fetch("playlist.json").then(function(r){return r.json()}).then(function(p){P=p;$("nombre").textContent=p.nombre;Q.voces=p.pista.filter(function(x){return x.tipo==="voz"});Q.cada=p.cada_temas||2;cargarTemas();L("lista cargada: "+Q.voces.length+" locuciones, "+Q.temas.length+" temas")}).catch(function(){L("no se pudo cargar playlist.json")});
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("sw.js").catch(function(){});
+</script></main></body></html>
