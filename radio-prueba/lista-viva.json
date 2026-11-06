@@ -1,5 +1,5 @@
 {
- "rev": 10,
+ "rev": 11,
  "quitar": [],
  "anadir": [
   {
@@ -761,6 +761,276 @@
    "id": "NRTkyHnQFQQ",
    "titulo": "Tony Vega - Haremos El Amor",
    "genero": "salsa"
+  },
+  {
+   "id": "ZYFtJzJEO1o",
+   "titulo": "No Merezco Tanto Silencio - Jorge Celedón l Video Oficial",
+   "genero": "vallenato"
+  },
+  {
+   "id": "BudVsICXxF8",
+   "titulo": "Esta Vida - Jorge Celedón l Video Oficial",
+   "genero": "vallenato"
+  },
+  {
+   "id": "-LxRiXjoEgE",
+   "titulo": "Por Estar Adorandote",
+   "genero": "vallenato"
+  },
+  {
+   "id": "CtsEMU55AUI",
+   "titulo": "El Invierno Pasado",
+   "genero": "vallenato"
+  },
+  {
+   "id": "umTcUnyk7j4",
+   "titulo": "Cuatro Rosas",
+   "genero": "vallenato"
+  },
+  {
+   "id": "sqgrvPMetRY",
+   "titulo": "Ay Hombe, Jorge Celedón & Jimmy Zambrano - Video Oficial",
+   "genero": "vallenato"
+  },
+  {
+   "id": "ZsGZX292B2M",
+   "titulo": "Si No Me Abrazas - Jorge Oñate (Video Oficial) | Discos Fuentes",
+   "genero": "vallenato"
+  },
+  {
+   "id": "hkgyOSrDL-I",
+   "titulo": "Jorge Oñate - No Comprendi Tu Amor (Cover Audio)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "VD80zmwwzOg",
+   "titulo": "Jorge Oñate - Triste Y Confundido (Cover Audio)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "L6xMZJA3YTE",
+   "titulo": "No comprendí tu amor, Jorge Oñate - Video Oficial",
+   "genero": "vallenato"
+  },
+  {
+   "id": "ZOYtGYK3DsU",
+   "titulo": "Una Aventura Más, Jorge Oñate - Letra Oficial",
+   "genero": "vallenato"
+  },
+  {
+   "id": "SKV6zQyeJeo",
+   "titulo": "Diomedes Díaz - Amarte Más No Pude  (Letra Oficial)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "6egSMBVH0ok",
+   "titulo": "Diomedes Díaz - Así Me Hizo Dios  (Letra Oficial)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "uSG9ejcx7UM",
+   "titulo": "Diomedes Díaz - Tu Eres La Reina  (Letra Oficial)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "GLsCt1cu84s",
+   "titulo": "Diomedes Díaz - Manguito Biche  (Letra Oficial)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "L7YOsky3jaQ",
+   "titulo": "Diomedes Díaz - Sin Saber Que Me Espera (Video Oficial)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "EHDZv8-If-A",
+   "titulo": "Diomedes Díaz - A Un Cariño Del Alma  (Letra Oficial)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "FU-7mHUTJKk",
+   "titulo": "Diomedes Díaz - La Suerte Está Echada (Cover Audio)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "yry3rgGlRUw",
+   "titulo": "Olvídala, Binomio De Oro De América - Vallenato Official Video",
+   "genero": "vallenato"
+  },
+  {
+   "id": "wDeZiEZGS3Q",
+   "titulo": "Me Ilusioné, Binomio De Oro De América - Video Oficial",
+   "genero": "vallenato"
+  },
+  {
+   "id": "v4ZRDenS6-g",
+   "titulo": "Es Tan Difícil, Binomio De Oro De América - Video",
+   "genero": "vallenato"
+  },
+  {
+   "id": "Oivh8QCD1w4",
+   "titulo": "Distintos Destinos, Binomio de Oro de América - Video Letra",
+   "genero": "vallenato"
+  },
+  {
+   "id": "LqKscPDW8Y0",
+   "titulo": "Silvestre Dangond - Las Locuras Mías (Official Video)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "qh-P_UIkUsk",
+   "titulo": "Que No Se Enteren, Silvestre Dangond & Juancho De La Espriella - Audio",
+   "genero": "vallenato"
+  },
+  {
+   "id": "8YmplZWFIMM",
+   "titulo": "Loco Paranoico, Silvestre Dangond & Rolando Ochoa - Letra Oficial",
+   "genero": "vallenato"
+  },
+  {
+   "id": "34K2dYw_od8",
+   "titulo": "Cómo Lo Hizo, Silvestre Dangond - Letra Oficial",
+   "genero": "vallenato"
+  },
+  {
+   "id": "5H8pPtnDWFY",
+   "titulo": "Silvestre Dangond - LA VALLENATA (Official Video)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "Nmb80HXWsFQ",
+   "titulo": "Carlos Vives - La Gota Fría (Oficial) (1993)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "-QkmEVNA-fo",
+   "titulo": "Carlos Vives - La Tierra del Olvido (Official Video Remastered)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "ORzwHmeJAmU",
+   "titulo": "Carlos Vives - Hijo del Vallenato (En Vivo Desde Santa Marta) (Official Video)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "Mtau4v6foHA",
+   "titulo": "Carlos Vives, Sebastián Yatra - Robarte un Beso (Official Video)",
+   "genero": "vallenato"
+  },
+  {
+   "id": "4r7pdOtdC7s",
+   "titulo": "Los Panchos - Si Tu Me Dices Ven (Lodo)",
+   "genero": "bolero"
+  },
+  {
+   "id": "tqKCXJaSr60",
+   "titulo": "Los Panchos - Sin Ti",
+   "genero": "bolero"
+  },
+  {
+   "id": "cNo-d6Y6w8Y",
+   "titulo": "Luis Miguel - Sabor A Mi (Video Con Letra)",
+   "genero": "bolero"
+  },
+  {
+   "id": "6hb50NfWoJY",
+   "titulo": "Luis Miguel - La Barca (Letra) ♡",
+   "genero": "bolero"
+  },
+  {
+   "id": "_7yo0nKO9lc",
+   "titulo": "Luis Miguel - Usted (Letra) ♡",
+   "genero": "bolero"
+  },
+  {
+   "id": "wTaj2HTa6jk",
+   "titulo": "CONTIGO APRENDÌ  ARMANDO MANZANERO",
+   "genero": "bolero"
+  },
+  {
+   "id": "MhGxt7i9zLM",
+   "titulo": "Armando Manzanero - Adoro",
+   "genero": "bolero"
+  },
+  {
+   "id": "4f0YllPAkUA",
+   "titulo": "Esta tarde vi llover - Armando manzanero (letra)",
+   "genero": "bolero"
+  },
+  {
+   "id": "nxXvOEPsE0s",
+   "titulo": "Los Ángeles Azules - Cómo Te Voy A Olvidar (Video Oficial)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "8L5afVdhk5E",
+   "titulo": "Los Ángeles Azules - Cumbia Pa´ Gozar (Live)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "boXXIs7VQ7E",
+   "titulo": "Los Ángeles Azules - Cumbia Más Tropical (Animated Video)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "RNXQ6hFFbkQ",
+   "titulo": "Los Ángeles Azules - Cumbia Coqueta (Live)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "BokdSWC2R68",
+   "titulo": "Los Ángeles Azules - Mis Sentimientos ft. Ximena Sariñana",
+   "genero": "cumbia"
+  },
+  {
+   "id": "k0jjy2sUjQ0",
+   "titulo": "Celso Piña - Cumbia Sobre El Río (Video con Letra)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "z2c5xCmLiAE",
+   "titulo": "CELSO PIÑA - REINA DE CUMBIAS (VIDEO OFICIAL)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "XwthVKd8DJ0",
+   "titulo": "Celso Piña - Cumbia Sampuesana (En Vivo)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "FY2YUZkGoo4",
+   "titulo": "Aniceto Molina - Fiesta Cumbiambera",
+   "genero": "cumbia"
+  },
+  {
+   "id": "9lFG7gDFBRw",
+   "titulo": "Aniceto Molina - Cumbia Cienaguera.",
+   "genero": "cumbia"
+  },
+  {
+   "id": "_TuUxGO_yN0",
+   "titulo": "Aniceto Molina - El Peluquero",
+   "genero": "cumbia"
+  },
+  {
+   "id": "Y4DkbHSXqEw",
+   "titulo": "La Sonora Dinamita - El Viejo Del Sombrerón ft. La Morocha",
+   "genero": "cumbia"
+  },
+  {
+   "id": "z5svoighsdk",
+   "titulo": "La Sonora Dinamita - Qué Bello ft. Kika Edgar",
+   "genero": "cumbia"
+  },
+  {
+   "id": "9__vfy2bemU",
+   "titulo": "Fiebre de Cumbia - La Sonora Dinamita (Audio)",
+   "genero": "cumbia"
+  },
+  {
+   "id": "raW309TfeQ8",
+   "titulo": "Mosaico Cumbias, La Pollera Colora y otros (Video Oficial) - La Sonora Dinamita | Discos Fuentes",
+   "genero": "cumbia"
   }
  ],
  "poner_ya": "",
